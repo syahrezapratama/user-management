@@ -1,6 +1,22 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+// import store from './store'
 
-createApp(App).use(store).use(router).mount('#app')
+import HomePage from './components/HomePage.vue';
+import TheNavigation from './components/TheNavigation.vue';
+import DataPage from './components/DataPage.vue';
+import ListPersons from './components/ListPersons.vue';
+import SearchPage from './components/SearchPage.vue';
+import LogoutPage from './components/LogoutPage.vue';
+
+const app = createApp(App);
+
+app.use(router);
+app.component('home-page', HomePage);
+app.component('the-navigation', TheNavigation);
+app.component('data-page', DataPage);
+app.component('list-persons', ListPersons)
+app.component('search-page', SearchPage);
+app.component('logout-page', LogoutPage);
+app.mount('#app');
