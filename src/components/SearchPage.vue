@@ -1,7 +1,7 @@
 <template>
   <div class="container col-8">
     <h1>Search</h1>
-    <form @submit.prevent="submitData">
+    <form>
       <div class="row mb-3">
         <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
         <div class="col-sm-8">
@@ -10,7 +10,6 @@
             id="email"
             name="email"
             type="email"
-            v-model="prevEmail"
           />
         </div>
       </div>
@@ -22,7 +21,6 @@
             id="name"
             name="name"
             type="text"
-            v-model="prevName"
           />
         </div>
       </div>
@@ -34,7 +32,6 @@
             id="postalCode"
             name="postalCode"
             type="text"
-            v-model="prevPostalCode"
           />
         </div>
       </div>
@@ -46,7 +43,6 @@
             id="city"
             name="city"
             type="text"
-            v-model="prevCity"
           />
         </div>
       </div>
@@ -58,7 +54,6 @@
             id="phone"
             name="phone"
             type="text"
-            v-model="prevPhone"
           />
         </div>
       </div>

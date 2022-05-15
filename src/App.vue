@@ -3,6 +3,7 @@
     <main class="row">
       <the-navigation></the-navigation>
       <router-view></router-view>
+      <!-- <user-data></user-data> -->
     </main>
   </div>
 </template>
@@ -65,7 +66,51 @@ export default {
           phone: "0172122329",
           password: "test",
         },
-        
+        {
+          id: "u6",
+          email: "ben@gmail.com",
+          name: "Ben",
+          postalCode: "12875",
+          city: "München",
+          phone: "0172122329",
+          password: "test",
+        },
+        {
+          id: "u7",
+          email: "adam@gmail.com",
+          name: "Adam",
+          postalCode: "12875",
+          city: "Hannnover",
+          phone: "0172122329",
+          password: "test",
+        },
+        {
+          id: "u8",
+          email: "steve@gmail.com",
+          name: "Steve",
+          postalCode: "12875",
+          city: "München",
+          phone: "0172122329",
+          password: "test",
+        },
+        {
+          id: "u9",
+          email: "cassie@gmail.com",
+          name: "Cassie",
+          postalCode: "12875",
+          city: "Hamburg",
+          phone: "0172122329",
+          password: "test",
+        },
+        {
+          id: "u10",
+          email: "elle@gmail.com",
+          name: "Elle",
+          postalCode: "12875",
+          city: "München",
+          phone: "0172122329",
+          password: "test",
+        },        
       ],
     };
   },
@@ -80,7 +125,8 @@ export default {
     return {
       myData: this.myData,
       updateData: this.updateData,
-      users: this.users
+      users: this.users,
+      handleRowClick: this.handleRowClick
     };
   },
 };

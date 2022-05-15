@@ -1,7 +1,7 @@
 <template>
-  <div class="container container col-8">
+  <div class="container col-8">
     <h1>List Persons</h1>
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">E-Mail</th>
@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in users" :key="user.id" @click="handleRowClick(user.id)">
           <th scope="row">{{ user.email }}</th>
           <td>{{ user.name }}</td>
           <td>{{ user.postalCode }}</td>
@@ -27,7 +27,24 @@
 <script>
 export default {
   inject: ["users"],
+  computed: {
+    userLink(id) {
+      return {
+        name: 'user',
+        params: { userId: id}
+      }
+    }
+  },
+  methods: {
+    handleRowClick(userId) {
+      this.$router.push('/persons/' + userId);
+    }
+  }
 };
 </script>
 
-<style></style>
+<style>
+tr:hover {
+  cursor: pointer;
+}
+</style>
