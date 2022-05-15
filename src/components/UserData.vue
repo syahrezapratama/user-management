@@ -41,7 +41,9 @@
       </div>
     </div>
     <div class="row mt-5 justify-content-center">
-      <button class="btn btn-primary col-sm-4">Bearbeiten</button>
+      <router-link :to="userDataLink">
+        <button class="btn btn-primary col-sm-4">Bearbeiten</button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -51,21 +53,30 @@ export default {
     inject: ['users'],
     data() {
         return {
+            id: '',
             email: '',
             name: '',
             postalCode: '',
             city: '',
-            phone: ''
+            phone: '',
+            password: ''
         }
     },
     created() {
         const userId = this.$route.params.userId;
         const selectedUser = this.users.find(user => user.id === userId);
+        this.id = userId;
         this.email = selectedUser.email;
         this.name = selectedUser.name;
         this.postalCode = selectedUser.postalCode;
         this.city = selectedUser.city;
         this.phone = selectedUser.phone;
+        this.password = selectedUser.password;
+    },
+    computed: {
+        userDataLink() {
+            return '/editUser/' + this.id;
+        }
     }
 };
 </script>

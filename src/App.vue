@@ -120,13 +120,20 @@ export default {
       console.log(this.myData);
       this.$router.push("/updateSuccess");
     },
+    updateUserData() {
+      console.log('updateUserData method klicked')
+    },
+    selectUserData() {
+      
+    }
   },
   provide() {
     return {
       myData: this.myData,
       updateData: this.updateData,
       users: this.users,
-      handleRowClick: this.handleRowClick
+      handleRowClick: this.handleRowClick,
+      updateUserData: this.updateUserData
     };
   },
 };
