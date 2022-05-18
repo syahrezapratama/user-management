@@ -128,6 +128,7 @@ export default {
       repeatPassword: "",
       confirm: { value: false, isValid: true },
       formIsValid: true,
+      error: null
     };
   },
   methods: {
@@ -165,19 +166,27 @@ export default {
         this.formIsValid = false;
       }
     },
-    submitForm() {
+    async submitForm() {
       this.validateForm();
       if (!this.formIsValid) {
         return;
       }
-      console.log({
+      const newUserData = {
         email: this.email.value,
         name: this.name.value,
         postalCode: this.postalCode.value,
         city: this.city.value,
         phone: this.phone.value,
         password: this.password.value,
-      });
+      };
+      console.log(newUserData);
+      try {
+          await this.$store.dispatch('registerUser', newUserData);
+          this.$router.replace('/registrationSuccess')
+      } catch(error) {
+          this.error = error.message;
+          console.log(this.error)
+      }
     },
   },
 };

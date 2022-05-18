@@ -9,6 +9,7 @@ import SuccessDialog from "../components/SuccessDialog.vue";
 import UserData from "../components/UserData.vue";
 import EditUser from "../components/EditUser.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
+import RegistrationSuccess from "../components/RegistrationSuccess.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,7 +23,8 @@ const router = createRouter({
     { path: "/updateSuccess", component: SuccessDialog },
     { path: "/persons/:userId", component: UserData },
     { path: "/editUser/:userId", component: EditUser},
-    { path: "/registration", component: RegistrationForm}
+    { path: "/registration", component: RegistrationForm},
+    { path: "/registrationSuccess", component: RegistrationSuccess}
   ],
   linkActiveClass: "active",
 });

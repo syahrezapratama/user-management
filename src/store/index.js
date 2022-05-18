@@ -119,6 +119,30 @@ const store = createStore({
     }
   },
   actions: {
+    async registerUser(context, payload) {
+      const userData = {
+        email: payload.email,
+        name: payload.name,
+        postalCode: payload.postalCode,
+        city: payload.city,
+        phone: payload.phone,
+        password: payload.password
+      };
+      const response = await fetch(
+        `https://user-administration-b771b-default-rtdb.firebaseio.com/users.json`, 
+        {
+          method: 'POST',
+          body: JSON.stringify(userData),
+        }
+      );
+      const responseData = await response.json();
+      if(!response.ok) {
+        const error = new Error(responseData.message || 'Failed to register new user');
+        throw error;
+      }
+      userData.id = responseData.name;
+      context.commit('registerUser', userData);
+    }
   },
   modules: {
   }
