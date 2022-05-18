@@ -10,6 +10,7 @@ import ListPersons from './components/ListPersons.vue';
 import SearchPage from './components/SearchPage.vue';
 import LogoutPage from './components/LogoutPage.vue';
 import UserData from './components/UserData.vue';
+import RegistrationForm from './components/RegistrationForm.vue';
 
 const app = createApp(App);
 
@@ -22,4 +23,5 @@ app.component('list-persons', ListPersons)
 app.component('search-page', SearchPage);
 app.component('logout-page', LogoutPage);
 app.component('user-data', UserData);
+app.component('registration-form', RegistrationForm);
 app.mount('#app');
