@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-8">
+  <div class="container col-9">
     <h1>List Persons</h1>
     <table class="table table-striped">
       <thead>
@@ -26,25 +26,42 @@
 
 <script>
 export default {
-  inject: ["users"],
+  data() {
+    return {
+      error: null,
+    };
+  },
   computed: {
+    users() {
+      return this.$store.getters["users"];
+    },
     userLink(id) {
       return {
-        name: 'user',
-        params: { userId: id}
-      }
-    }
+        name: "user",
+        params: { userId: id },
+      };
+    },
   },
   methods: {
+    async loadUsers() {
+      try {
+        await this.$store.dispatch("loadUsers");
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
     handleRowClick(userId) {
-      this.$router.push('/persons/' + userId);
-    }
-  }
+      this.$router.push("/persons/" + userId);
+    },
+  },
+  created() {
+    this.loadUsers();
+  },
 };
 </script>
 
 <style>
-tr:hover {
+tbody > tr:hover {
   cursor: pointer;
 }
 </style>

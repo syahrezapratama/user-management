@@ -1,7 +1,7 @@
 <template>
   <div class="app container">
     <main class="row">
-      <!-- <the-navigation></the-navigation> -->
+      <the-navigation></the-navigation>
       <router-view></router-view>
       <!-- <user-data></user-data> -->
       <!-- <registration-form></registration-form> -->

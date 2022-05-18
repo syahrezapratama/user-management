@@ -5,7 +5,7 @@
         <p>E-Mail</p>
       </div>
       <div class="col-8">
-        <p>{{ email }}</p>
+        <p>{{ selectedUser.email }}</p>
       </div>
     </div>
     <div class="row">
@@ -13,7 +13,7 @@
         <p>Name</p>
       </div>
       <div class="col-8">
-        <p>{{ name }}</p>
+        <p>{{ selectedUser.name }}</p>
       </div>
     </div>
     <div class="row">
@@ -21,7 +21,7 @@
         <p>PLZ</p>
       </div>
       <div class="col-8">
-        <p>{{ postalCode }}</p>
+        <p>{{ selectedUser.postalCode }}</p>
       </div>
     </div>
     <div class="row">
@@ -29,7 +29,7 @@
         <p>Ort</p>
       </div>
       <div class="col-8">
-        <p>{{ city }}</p>
+        <p>{{ selectedUser.city }}</p>
       </div>
     </div>
     <div class="row">
@@ -37,7 +37,7 @@
         <p>Telefon</p>
       </div>
       <div class="col-8">
-        <p>{{ phone }}</p>
+        <p>{{ selectedUser.phone }}</p>
       </div>
     </div>
     <div class="row mt-5 justify-content-center">
@@ -50,34 +50,20 @@
 
 <script>
 export default {
-    inject: ['users'],
-    data() {
-        return {
-            id: '',
-            email: '',
-            name: '',
-            postalCode: '',
-            city: '',
-            phone: '',
-            password: ''
-        }
+  data() {
+    return {
+      selectedUser: null
+    };
+  },
+  created() {
+    const userId = this.$route.params.userId;
+    this.selectedUser = this.$store.getters['users'].find(user => user.id === userId);
+  },
+  computed: {
+    userDataLink() {
+      return "/editUser/" + this.id;
     },
-    created() {
-        const userId = this.$route.params.userId;
-        const selectedUser = this.users.find(user => user.id === userId);
-        this.id = userId;
-        this.email = selectedUser.email;
-        this.name = selectedUser.name;
-        this.postalCode = selectedUser.postalCode;
-        this.city = selectedUser.city;
-        this.phone = selectedUser.phone;
-        this.password = selectedUser.password;
-    },
-    computed: {
-        userDataLink() {
-            return '/editUser/' + this.id;
-        }
-    }
+  },
 };
 </script>
 
