@@ -6,7 +6,21 @@
 
 <script>
 export default {
-
+  methods: {
+    async loadUsers() {
+      try {
+        await this.$store.dispatch("loadUsers");
+        console.log(this.$store.getters.users);
+      } catch (error) {
+        this.error = error.message;
+        console.log(this.error)
+      }
+    },
+  },
+  created() {
+    this.loadUsers();
+    
+  }
 }
 </script>
 

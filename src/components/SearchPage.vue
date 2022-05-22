@@ -74,27 +74,11 @@ export default {
       city: '',
       phone: ''
     }
+  },
+  methods: {
+    searchUsers() {}
   }
 };
 </script>
 
-<style>
-/* div {
-  min-width: 600px;
-}
-form div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0;
-}
-input {
-  min-width: 400px;
-}
-.button-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
-</style>
+<style></style>

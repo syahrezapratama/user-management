@@ -10,6 +10,7 @@ import UserData from "../components/UserData.vue";
 import EditUser from "../components/EditUser.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
 import RegistrationSuccess from "../components/RegistrationSuccess.vue";
+import LoginPage from "../components/LoginPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,7 +25,8 @@ const router = createRouter({
     { path: "/persons/:userId", component: UserData },
     { path: "/editUser/:userId", component: EditUser},
     { path: "/registration", component: RegistrationForm},
-    { path: "/registrationSuccess", component: RegistrationSuccess}
+    { path: "/registrationSuccess", component: RegistrationSuccess}, 
+    { path: "/login", component: LoginPage }
   ],
   linkActiveClass: "active",
 });

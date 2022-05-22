@@ -1,9 +1,9 @@
 <template>
-  <div class="row container">
+  <div class="container col-8">
     <div class="col-sm-4">
       <h1>Registrierung</h1>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-8 mt-3">
       <form @submit.prevent="submitForm">
         <div class="invalid"  v-if="!formIsValid">
           <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>

@@ -10,7 +10,7 @@
             id="email"
             name="email"
             type="email"
-            v-model="myData.email"
+            v-model="selectedUser.email"
           />
         </div>
       </div>
@@ -22,7 +22,7 @@
             id="name"
             name="name"
             type="text"
-            v-model="myData.name"
+            v-model="selectedUser.name"
           />
         </div>
       </div>
@@ -34,7 +34,7 @@
             id="postalCode"
             name="postalCode"
             type="text"
-            v-model="myData.postalCode"
+            v-model="selectedUser.postalCode"
           />
         </div>
       </div>
@@ -46,7 +46,7 @@
             id="city"
             name="city"
             type="text"
-            v-model="myData.city"
+            v-model="selectedUser.city"
           />
         </div>
       </div>
@@ -58,7 +58,7 @@
             id="phone"
             name="phone"
             type="text"
-            v-model="myData.phone"
+            v-model="selectedUser.phone"
           />
         </div>
       </div>
@@ -70,7 +70,7 @@
             id="password"
             name="password"
             type="password"
-            v-model="myData.password"
+            v-model="selectedUser.password"
           />
         </div>
       </div>
@@ -96,13 +96,23 @@
 </template>
 
 <script>
-
 export default {
-  inject: ['myData', 'updateData'],
   data() {
     return {
-      repeatPassword: ''
+      myId: '-N2LEwqp3goyqbMyS32a',
+      selectedUser: null,
+      repeatPassword: '',
+      error: null
     };
+  },
+  created() {
+    this.selectedUser = this.$store.getters['users'].find(user => user.id === this.myId);
+  },
+  computed: {
+    myData() {
+      const users = this.$store.getters['users'];
+      return users.find(user => user.id === this.myId);
+    }
   },
   methods: {
     checkPassword() {
@@ -110,10 +120,9 @@ export default {
         alert("Password does not match. Please repeat the same password.");
         return;
       } else {
-        this.updateData();
         this.repeatPassword = '';
       }
-    }
+    },
   }
 };
 </script>

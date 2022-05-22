@@ -1,7 +1,8 @@
 <template>
   <div class="container col-9">
     <h1>List Persons</h1>
-    <table class="table table-striped">
+    <p v-if="isLoading">Loading users...</p>
+    <table class="table table-striped" v-else>
       <thead>
         <tr>
           <th scope="col">E-Mail</th>
@@ -29,6 +30,7 @@ export default {
   data() {
     return {
       error: null,
+      isLoading: false
     };
   },
   computed: {
@@ -44,11 +46,13 @@ export default {
   },
   methods: {
     async loadUsers() {
+      this.isLoading = true;
       try {
         await this.$store.dispatch("loadUsers");
       } catch (error) {
         this.error = error.message;
       }
+      this.isLoading = false;
     },
     handleRowClick(userId) {
       this.$router.push("/persons/" + userId);
@@ -56,7 +60,12 @@ export default {
   },
   created() {
     this.loadUsers();
+    // console.log("page created");
   },
+  // updated() {
+  //   // this.loadUsers();
+  //   // console.log("page updated")
+  // }
 };
 </script>
 

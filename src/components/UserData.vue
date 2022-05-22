@@ -56,14 +56,24 @@ export default {
     };
   },
   created() {
-    const userId = this.$route.params.userId;
-    this.selectedUser = this.$store.getters['users'].find(user => user.id === userId);
+    this.loadUserData(this.$route);
   },
   computed: {
     userDataLink() {
-      return "/editUser/" + this.id;
+      return "/editUser/" + this.selectedUser.id;
     },
   },
+  methods: {
+    loadUserData(route) {
+      const userId = route.params.userId;
+      this.selectedUser = this.$store.getters['users'].find(user => user.id === userId);
+    }
+  },
+  watch: {
+    $route(newRoute) {
+      this.loadUserData(newRoute);
+    }
+  }
 };
 </script>
 
