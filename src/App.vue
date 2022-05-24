@@ -1,7 +1,7 @@
 <template>
   <div class="app container">
     <main class="row">
-      <!-- <the-navigation v-if="!userIsLoggedIn"></the-navigation> -->
+      <the-navigation v-if="userIsLoggedIn"></the-navigation>
       <router-view></router-view>
       <!-- <user-data></user-data> -->
       <!-- <registration-form></registration-form> -->
@@ -13,31 +13,14 @@
 export default {
   data() {
     return {
-      userIsLoggedIn: false
-    };
-  },
-  methods: {
-    updateData() {
-      // input data to database
-      console.log(this.myData);
-      this.$router.push("/updateSuccess");
-    },
-    updateUserData() {
-      console.log('updateUserData method klicked')
-    },
-    selectUserData() {
       
-    }
-  },
-  provide() {
-    return {
-      myData: this.myData,
-      updateData: this.updateData,
-      users: this.users,
-      handleRowClick: this.handleRowClick,
-      updateUserData: this.updateUserData
     };
   },
+  computed: {
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn;
+    }
+  }
 };
 </script>
 

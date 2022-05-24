@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
+      userIsLoggedIn: false,
       users: [],
     };
   },
@@ -10,6 +11,9 @@ const store = createStore({
     users(state) {
       return state.users;
     },
+    userIsLoggedIn(state) {
+      return state.userIsLoggedIn;
+    }
   },
   mutations: {
     // load user from firebase database, action: loadUsers
@@ -22,8 +26,14 @@ const store = createStore({
     updateUser(state, payload) {
       state.users = payload;
     },
+    logUserIn(state, payload) {
+      state.userIsLoggedIn = payload;
+    }
   },
   actions: {
+    logUserIn(context, payload) {
+      context.commit('logUserIn', payload);
+    },
     async loadUsers(context) {
       const response = await fetch(
         `https://user-administration-b771b-default-rtdb.firebaseio.com/users/.json`

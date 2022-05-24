@@ -1,6 +1,6 @@
 <template>
-  <div class="container col-8">
-    <div class="col-sm-4">
+  <div class="row mt-5">
+    <div class="col-sm-4 text-center">
       <h1>Registrierung</h1>
     </div>
     <div class="col-sm-8 mt-3">
@@ -10,7 +10,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !email.isValid}">
           <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="email"
@@ -22,7 +22,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !name.isValid}">
           <label class="col-sm-3 col-form-label" for="name">Name</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="name"
@@ -34,7 +34,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !postalCode.isValid}">
           <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="postalCode"
@@ -46,7 +46,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !city.isValid}">
           <label class="col-sm-3 col-form-label" for="city">Ort</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="city"
@@ -58,7 +58,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !phone.isValid}">
           <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="phone"
@@ -70,7 +70,7 @@
         </div>
         <div class="row mb-3" :class="{invalid: !password.isValid}">
           <label class="col-sm-3 col-form-label" for="password">Passwort</label>
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="password"
@@ -84,7 +84,7 @@
           <label class="col-sm-3 col-form-label" for="repeatPassword"
             >Wiederholung</label
           >
-          <div class="col-sm-8">
+          <div class="col-sm-6">
             <input
               class="form-control"
               id="repeatPassword"
@@ -93,7 +93,7 @@
             />
           </div>
         </div>
-        <div class="form-check mt-4" :class="{invalid: !confirm.isValid}">
+        <div class="form-check mt-4 col-sm-7" :class="{invalid: !confirm.isValid}">
           <input
             class="form-check-input"
             type="checkbox"

@@ -1,23 +1,35 @@
 <template>
   <div class="row mt-5">
-      <div class="col-sm-4 text-center">
-          <h1>Login</h1>
+    <div class="col-sm-4 text-center">
+      <h1>Login</h1>
+    </div>
+    <div class="col-sm-8">
+      <div class="invalid" v-if="!formIsValid">
+        <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
       </div>
-    <div class="col-sm-8 ">
-        <div class="invalid"  v-if="!formIsValid">
-          <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
-        </div>
-      <form>
-        <div class="row mb-3" :class="{invalid: !email.isValid}">
+      <form @submit.prevent="confirmLogin">
+        <div class="row mb-3" :class="{ invalid: !email.isValid }">
           <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
           <div class="col-sm-6">
-            <input class="form-control" id="email" type="email" placeholder="E-Mail" v-model="email.value" />
+            <input
+              class="form-control"
+              id="email"
+              type="email"
+              placeholder="E-Mail"
+              v-model="email.value"
+            />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !password.isValid}">
+        <div class="row mb-3" :class="{ invalid: !password.isValid }">
           <label class="col-sm-3 col-form-label" for="password">Passwort</label>
           <div class="col-sm-6">
-            <input class="form-control" id="password" type="password" placeholder="Passwort" v-model="password.value" />
+            <input
+              class="form-control"
+              id="password"
+              type="password"
+              placeholder="Passwort"
+              v-model="password.value"
+            />
           </div>
         </div>
         <div class="row mt-4 justify-content-center">
@@ -25,8 +37,11 @@
         </div>
       </form>
       <div class="mt-5">
-          <p>Noch nicht angemeldet?</p>
-          <p><router-link to="/registration">Hier klicken</router-link> um sich zu registrieren.</p>
+        <p>Noch nicht angemeldet?</p>
+        <p>
+          <router-link to="/registration">Hier klicken</router-link> um sich zu
+          registrieren.
+        </p>
       </div>
     </div>
   </div>
@@ -34,30 +49,36 @@
 
 <script>
 export default {
-    data() {
-        return {
-            email: { value: "", isValid: true },
-            password: { value: "", isValid: true },
-            formIsValid: true,
-            error: null
-        }
+  data() {
+    return {
+      email: { value: "", isValid: true },
+      password: { value: "", isValid: true },
+      formIsValid: true,
+      error: null,
+    };
+  },
+  methods: {
+    validateLogin() {
+      this.formIsValid = true;
+      if (this.email.value === "") {
+        this.email.isValid = false;
+        this.formIsValid = false;
+      }
+      if (this.password.value === "") {
+        this.email.value = false;
+        this.formIsValid = false;
+      }
     },
-    methods: {
-        validateLogin() {
-            this.formIsValid = true;
-            if (this.email.value === "") {
-                this.email.isValid = false;
-                this.formIsValid = false;
-            }
-            if (this.password.value === "") {
-                this.email.value = false;
-                this.formIsValid = false;
-            }
-        },
-        confirmLogin() {
-            this.validateLogin();
-        }
-    }
+    confirmLogin() {
+      this.validateLogin();
+      this.$store.dispatch('logUserIn', true);
+      console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);
+      this.$router.replace('/home')
+    },
+  },
+  created() {
+    console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);
+  }
 };
 </script>
 

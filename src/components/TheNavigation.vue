@@ -12,7 +12,7 @@
           <router-link class="nav-link" to="/search">Search</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/logout">Logout</router-link>
+          <router-link class="nav-link" to="/logout" @click="logout">Logout</router-link>
         </li>
       </ul>
     </nav>
@@ -21,6 +21,12 @@
 
 <script>
 export default {
+  methods: {
+    logout() {
+      this.$store.dispatch('logUserIn', false);
+      // this.$souter.replace('/login');
+    }
+  }
 };
 </script>
 
