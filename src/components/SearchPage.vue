@@ -10,6 +10,7 @@
             id="email"
             name="email"
             type="email"
+            v-model="email"
           />
         </div>
       </div>
@@ -21,17 +22,19 @@
             id="name"
             name="name"
             type="text"
+            v-model="name"
           />
         </div>
       </div>
       <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
+        <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
         <div class="col-sm-8">
           <input
             class="form-control"
-            id="postalCode"
-            name="postalCode"
+            id="zipCode"
+            name="zipCode"
             type="text"
+            v-model="zipCode"
           />
         </div>
       </div>
@@ -43,6 +46,7 @@
             id="city"
             name="city"
             type="text"
+            v-model="city"
           />
         </div>
       </div>
@@ -54,6 +58,7 @@
             id="phone"
             name="phone"
             type="text"
+            v-model="phone"
           />
         </div>
       </div>
@@ -70,7 +75,7 @@ export default {
     return {
       email: '',
       name: '',
-      postalCode: '',
+      zipCode: '',
       city: '',
       phone: ''
     }

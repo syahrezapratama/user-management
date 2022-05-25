@@ -45,6 +45,9 @@ export default {
     },
   },
   methods: {
+    handleRowClick(userId) {
+      this.$router.push("/persons/" + userId);
+    },
     async loadUsers() {
       this.isLoading = true;
       try {
@@ -53,19 +56,11 @@ export default {
         this.error = error.message;
       }
       this.isLoading = false;
-    },
-    handleRowClick(userId) {
-      this.$router.push("/persons/" + userId);
-    },
+    }
   },
   created() {
     this.loadUsers();
-    // console.log("page created");
   },
-  // updated() {
-  //   // this.loadUsers();
-  //   // console.log("page updated")
-  // }
 };
 </script>
 

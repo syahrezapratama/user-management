@@ -28,15 +28,15 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !postalCode.isValid}">
-        <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
+      <div class="row mb-3" :class="{invalid: !zipCode.isValid}">
+        <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
         <div class="col-sm-8">
           <input
             class="form-control"
-            id="postalCode"
-            name="postalCode"
+            id="zipCode"
+            name="zipCode"
             type="text"
-            v-model="postalCode.value"
+            v-model="zipCode.value"
           />
         </div>
       </div>
@@ -107,13 +107,14 @@ export default {
       id: '',
       email: { value: "", isValid: true },
       name: { value: "", isValid: true },
-      postalCode: { value: "", isValid: true },
+      zipCode: { value: "", isValid: true },
       city: { value: "", isValid: true },
       phone: { value: "", isValid: true },
       password: { value: "", isValid: true },
       repeatPassword: "",
       formIsValid: true,
       error: null,
+      isLoading: false
     };
   },
   methods: {
@@ -127,8 +128,8 @@ export default {
         this.name.isValid = false;
         this.formIsValid = false;
       }
-      if (this.postalCode.value === "") {
-        this.postalCode.isValid = false;
+      if (this.zipCode.value === "") {
+        this.zipCode.isValid = false;
         this.formIsValid = false;
       }
       if (this.city.value === "") {
@@ -153,7 +154,7 @@ export default {
         id: this.id,
         email: this.email.value,
         name: this.name.value,
-        postalCode: this.postalCode.value,
+        zipCode: this.zipCode.value,
         city: this.city.value,
         phone: this.phone.value,
         password: this.password.value
@@ -161,9 +162,7 @@ export default {
       console.log(updatedUserData);
       try {
         await this.$store.dispatch('updateUserData', updatedUserData);
-        setTimeout(() => {
-          this.$router.replace('/persons');
-        }, 500);
+        this.$router.replace("/persons/" + this.id);
       } catch (error) {
         this.error = error.message  || 'Failed to update data.';
         console.log(this.error);
@@ -184,10 +183,32 @@ export default {
     },
     goBack() {
       this.$router.replace('/persons')
-    }
+    },
+    async loadUser(route) {
+      this.isLoading = true;
+      const userId = route.params.userId;
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`);
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.status !== 200) {
+        const error = new Error(
+          response.statusText || `Failed to load users with id: ${userId}.`
+        );
+        throw error;
+      }
+      this.id = data.id;
+      this.email.value = data.email;
+      this.name.value = data.name;
+      this.zipCode.value = data.zipCode;
+      this.city.value = data.city;
+      this.phone.value = data.phone;
+      this.password.value = data.password;
+      this.isLoading = false;
+    },
   },
   created() {
-    this.loadUserData(this.$route.params.userId);
+    this.loadUser(this.$route);
   },
 };
 </script>

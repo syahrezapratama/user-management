@@ -32,15 +32,15 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !postalCode.isValid}">
-          <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
+        <div class="row mb-3" :class="{invalid: !zipCode.isValid}">
+          <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
           <div class="col-sm-6">
             <input
               class="form-control"
-              id="postalCode"
+              id="zipCode"
               type="text"
-              v-model="postalCode.value"
-              @blur="clearValidity('postalCode')"
+              v-model="zipCode.value"
+              @blur="clearValidity('zipCode')"
             />
           </div>
         </div>
@@ -121,7 +121,7 @@ export default {
     return {
       email: { value: "", isValid: true },
       name: { value: "", isValid: true },
-      postalCode: { value: "", isValid: true },
+      zipCode: { value: "", isValid: true },
       city: { value: "", isValid: true },
       phone: { value: "", isValid: true },
       password: { value: "", isValid: true },
@@ -145,8 +145,8 @@ export default {
         this.name.isValid = false;
         this.formIsValid = false;
       }
-      if (this.postalCode.value === "") {
-        this.postalCode.isValid = false;
+      if (this.zipCode.value === "") {
+        this.zipCode.isValid = false;
         this.formIsValid = false;
       }
       if (this.city.value === "") {
@@ -174,7 +174,7 @@ export default {
       const newUserData = {
         email: this.email.value,
         name: this.name.value,
-        postalCode: this.postalCode.value,
+        zipCode: this.zipCode.value,
         city: this.city.value,
         phone: this.phone.value,
         password: this.password.value,
@@ -184,7 +184,7 @@ export default {
           await this.$store.dispatch('registerUser', newUserData);
           this.$router.replace('/registrationSuccess')
       } catch(error) {
-          this.error = error.message;
+          this.error = error;
           console.log(this.error)
       }
     },

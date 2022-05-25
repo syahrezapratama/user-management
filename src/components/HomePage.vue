@@ -19,7 +19,6 @@ export default {
   },
   created() {
     this.loadUsers();
-    
   }
 }
 </script>

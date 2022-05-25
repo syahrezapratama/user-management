@@ -13,7 +13,7 @@ const store = createStore({
     },
     userIsLoggedIn(state) {
       return state.userIsLoggedIn;
-    }
+    },
   },
   mutations: {
     // load user from firebase database, action: loadUsers
@@ -28,86 +28,96 @@ const store = createStore({
     },
     logUserIn(state, payload) {
       state.userIsLoggedIn = payload;
-    }
+    },
   },
   actions: {
     logUserIn(context, payload) {
-      context.commit('logUserIn', payload);
+      console.log(payload);
+      context.commit("logUserIn", payload);
     },
     async loadUsers(context) {
-      const response = await fetch(
-        `https://user-administration-b771b-default-rtdb.firebaseio.com/users/.json`
-      );
-      const responseData = await response.json();
-      if (!response.ok) {
+      const response = await fetch("http://localhost:8081/api/users/allUsers");
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.status !== 200) {
         const error = new Error(
-          responseData.message || "Failed to load users."
+          response.statusText || "Failed to load users from API."
         );
         throw error;
       }
       const users = [];
-      for (const key in responseData) {
+      for (const key in data) {
         const user = {
-          id: key,
-          email: responseData[key].email,
-          name: responseData[key].name,
-          postalCode: responseData[key].postalCode,
-          city: responseData[key].city,
-          phone: responseData[key].phone,
-          password: responseData[key].password,
+          id: data[key].id,
+          email: data[key].email,
+          name: data[key].name,
+          postalCode: data[key].zipCode,
+          city: data[key].city,
+          phone: data[key].phone,
+          password: data[key].password,
         };
         users.push(user);
-        context.commit("setUsers", users);
       }
+      context.commit("setUsers", users);
     },
     async registerUser(context, payload) {
       const userData = {
         email: payload.email,
         name: payload.name,
-        postalCode: payload.postalCode,
+        zipCode: payload.zipCode,
         city: payload.city,
         phone: payload.phone,
         password: payload.password,
       };
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      };
       const response = await fetch(
-        `https://user-administration-b771b-default-rtdb.firebaseio.com/users.json`,
-        {
-          method: "POST",
-          body: JSON.stringify(userData),
-        }
+        "http://localhost:8081/api/users/registerUser",
+        requestOptions
       );
-      const responseData = await response.json();
-      if (!response.ok) {
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.status !== 201) {
         const error = new Error(
-          responseData.message || "Failed to register new user."
+          response.statusText || "Failed to post new user."
         );
         throw error;
       }
-      userData.id = responseData.name;
       context.commit("registerUser", userData);
     },
     async updateUserData(context, payload) {
       const userId = payload.id;
-      let updateUser = context.getters.users.find((user) => user.id === userId);
-      updateUser = {
+      // let updateUser = context.getters.users.find((user) => user.id === userId);
+      const updateUser = {
         email: payload.email,
         name: payload.name,
-        postalCode: payload.postalCode,
+        zipCode: payload.zipCode,
         city: payload.city,
         phone: payload.phone,
         password: payload.password,
+        type: payload.type ? payload.type : "normal"
       };
-      const response = await fetch(`https://user-administration-b771b-default-rtdb.firebaseio.com/users/${userId}.json`,
-      {
+      const requestOptions = {
         method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateUser)
-      });
-      const responseData = await response.json();
-      if (!response.ok) {
-        const error = new Error(responseData.message || 'Failed to send request.');
+      };
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, requestOptions);
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (response.status !== 200) {
+        const error = new Error(
+          response.statusText || `Failed to update user ${userId}.`
+        );
         throw error;
       }
-      context.commit('updateUser', updateUser);
+      context.commit("updateUser", updateUser);
     },
   },
 });
