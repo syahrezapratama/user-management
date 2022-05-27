@@ -26,6 +26,9 @@ const store = createStore({
     updateUser(state, payload) {
       state.users = payload;
     },
+    deleteUser(state, payload) {
+      state.users = payload;
+    },
     logUserIn(state, payload) {
       state.userIsLoggedIn = payload;
     },
@@ -119,6 +122,21 @@ const store = createStore({
       }
       context.commit("updateUser", updateUser);
     },
+    async deleteUser(context, payload) {
+      const userId = payload.id;
+      const requestOptions = {
+        method: "DELETE"
+      };
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, requestOptions);
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
+        throw error;
+      }
+      context.commit("deleteUser")
+    }
   },
 });
 export default store;
