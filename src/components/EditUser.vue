@@ -1,10 +1,10 @@
 <template>
   <div class="container col-8">
     <form @submit.prevent="submitForm">
-      <div class="invalid"  v-if="!formIsValid">
-          <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
-        </div>
-      <div class="row mb-3" :class="{invalid: !email.isValid}">
+      <div class="invalid" v-if="!formIsValid">
+        <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
+      </div>
+      <div class="row mb-3" :class="{ invalid: !email.isValid }">
         <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
         <div class="col-sm-8">
           <input
@@ -16,7 +16,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !name.isValid}">
+      <div class="row mb-3" :class="{ invalid: !name.isValid }">
         <label class="col-sm-3 col-form-label" for="name">Name</label>
         <div class="col-sm-8">
           <input
@@ -28,7 +28,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !zipCode.isValid}">
+      <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
         <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
         <div class="col-sm-8">
           <input
@@ -40,7 +40,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !city.isValid}">
+      <div class="row mb-3" :class="{ invalid: !city.isValid }">
         <label class="col-sm-3 col-form-label" for="city">Ort</label>
         <div class="col-sm-8">
           <input
@@ -52,7 +52,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !phone.isValid}">
+      <div class="row mb-3" :class="{ invalid: !phone.isValid }">
         <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
         <div class="col-sm-8">
           <input
@@ -64,7 +64,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !password.isValid}">
+      <div class="row mb-3" :class="{ invalid: !password.isValid }">
         <label class="col-sm-3 col-form-label" for="password">Passwort</label>
         <div class="col-sm-8">
           <input
@@ -76,7 +76,7 @@
           />
         </div>
       </div>
-      <div class="row mb-3" :class="{invalid: !password.isValid}">
+      <div class="row mb-3" :class="{ invalid: !password.isValid }">
         <label class="col-sm-3 col-form-label" for="repeatPassword"
           >Wiederholung</label
         >
@@ -88,6 +88,15 @@
             type="password"
             v-model="repeatPassword"
           />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="userType" class="col-sm-3 col-form-label">Rechte</label>
+        <div class="col-sm-8">
+          <select class="form-select" id="userType" name="userType" v-model="userType">
+            <option value="normal">Normaler User</option>
+            <option value="admin">Administrator</option>
+          </select>
         </div>
       </div>
       <div class="row mt-5 justify-content-center">
@@ -104,7 +113,7 @@
 export default {
   data() {
     return {
-      id: '',
+      id: "",
       email: { value: "", isValid: true },
       name: { value: "", isValid: true },
       zipCode: { value: "", isValid: true },
@@ -112,9 +121,10 @@ export default {
       phone: { value: "", isValid: true },
       password: { value: "", isValid: true },
       repeatPassword: "",
+      userType: "",
       formIsValid: true,
       error: null,
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
@@ -140,7 +150,10 @@ export default {
         this.phone.isValid = false;
         this.formIsValid = false;
       }
-      if (this.password.value === "" || this.password.value !== this.repeatPassword) {
+      if (
+        this.password.value === "" ||
+        this.password.value !== this.repeatPassword
+      ) {
         this.password.isValid = false;
         this.formIsValid = false;
       }
@@ -157,14 +170,15 @@ export default {
         zipCode: this.zipCode.value,
         city: this.city.value,
         phone: this.phone.value,
-        password: this.password.value
-      }
+        password: this.password.value,
+        type: this.userType
+      };
       console.log(updatedUserData);
       try {
-        await this.$store.dispatch('updateUserData', updatedUserData);
+        await this.$store.dispatch("updateUserData", updatedUserData);
         this.$router.replace("/persons/" + this.id);
       } catch (error) {
-        this.error = error.message  || 'Failed to update data.';
+        this.error = error.message || "Failed to update data.";
         console.log(this.error);
       }
     },
@@ -182,7 +196,7 @@ export default {
       this.password.value = selectedUser.password;
     },
     goBack() {
-      this.$router.replace('/persons')
+      this.$router.replace("/persons");
     },
     async loadUser(route) {
       this.isLoading = true;
@@ -204,6 +218,7 @@ export default {
       this.city.value = data.city;
       this.phone.value = data.phone;
       this.password.value = data.password;
+      this.userType = data.type;
       this.isLoading = false;
     },
   },
