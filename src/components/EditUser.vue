@@ -104,7 +104,7 @@
       </div>
     </form>
     <div class="row mt-3 justify-content-center">
-      <button class="btn btn-danger col-sm-4" @click="goBack">Löschen</button>
+      <button class="btn btn-danger col-sm-4" @click="deleteUser">Löschen</button>
     </div>
   </div>
 </template>
@@ -195,7 +195,18 @@ export default {
       this.phone.value = selectedUser.phone;
       this.password.value = selectedUser.password;
     },
-    goBack() {
+    async deleteUser() {
+      const userId = this.id;
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
+        method: "DELETE"
+      });
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
+        throw error;
+      }
       this.$router.replace("/persons");
     },
     async loadUser(route) {
@@ -207,7 +218,7 @@ export default {
       console.log(data);
       if (response.status !== 200) {
         const error = new Error(
-          response.statusText || `Failed to load users with id: ${userId}.`
+          response.statusText || `Failed to load user with id: ${userId}.`
         );
         throw error;
       }
