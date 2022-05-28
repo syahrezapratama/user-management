@@ -5,6 +5,7 @@ const store = createStore({
     return {
       userIsLoggedIn: false,
       users: [],
+      selectedUser: null
     };
   },
   getters: {
@@ -14,9 +15,11 @@ const store = createStore({
     userIsLoggedIn(state) {
       return state.userIsLoggedIn;
     },
+    selectedUser(state) {
+      return state.selectedUser;
+    }
   },
   mutations: {
-    // load user from firebase database, action: loadUsers
     setUsers(state, payload) {
       state.users = payload;
     },
@@ -27,11 +30,15 @@ const store = createStore({
       state.users = payload;
     },
     deleteUser(state, payload) {
-      state.users = payload;
+      const users = state.users.filter(user => user.id != payload);
+      state.users = users;
     },
     logUserIn(state, payload) {
       state.userIsLoggedIn = payload;
     },
+    setSelectedUser(state, payload) {
+      state.selectedUser = payload;
+    }
   },
   actions: {
     logUserIn(context, payload) {
@@ -43,7 +50,7 @@ const store = createStore({
       console.log(response);
       const data = await response.json();
       console.log(data);
-      if (response.status !== 200) {
+      if (!response.ok) {
         const error = new Error(
           response.statusText || "Failed to load users from API."
         );
@@ -55,14 +62,27 @@ const store = createStore({
           id: data[key].id,
           email: data[key].email,
           name: data[key].name,
-          postalCode: data[key].zipCode,
+          zipCode: data[key].zipCode,
           city: data[key].city,
           phone: data[key].phone,
           password: data[key].password,
+          type: data[key].type
         };
         users.push(user);
       }
       context.commit("setUsers", users);
+    },
+    async selectUser(context, payload) {
+      const userId = payload;
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`);
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const error = new Error(response.statusText || `Failed to load user with id: ${userId}.`);
+        throw error;
+      }
+      context.commit("setSelectedUser", data);
     },
     async registerUser(context, payload) {
       const userData = {
@@ -123,19 +143,19 @@ const store = createStore({
       context.commit("updateUser", updateUser);
     },
     async deleteUser(context, payload) {
-      const userId = payload.id;
-      const requestOptions = {
-        method: "DELETE"
-      };
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`, requestOptions);
+      // delete video in server
+      const userId = payload;
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, { method: "DELETE" });
       console.log(response);
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
         const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
         throw error;
+      } else {
+        // delete video in state
+        context.commit("deleteUser", userId);
       }
-      context.commit("deleteUser")
     }
   },
 });

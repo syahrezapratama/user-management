@@ -55,7 +55,6 @@
 export default {
   data() {
     return {
-      selectedUser: null,
       isLoading: false,
     };
   },
@@ -63,6 +62,9 @@ export default {
     this.loadUser(this.$route);
   },
   computed: {
+    selectedUser() {
+      return this.$store.getters["selectedUser"];
+    },
     userDataLink() {
       return "/editUser/" + this.selectedUser.id;
     },
@@ -71,17 +73,11 @@ export default {
     async loadUser(route) {
       this.isLoading = true;
       const userId = route.params.userId;
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`);
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (response.status !== 200) {
-        const error = new Error(
-          response.statusText || `Failed to load users with id: ${userId}.`
-        );
-        throw error;
+      try {
+        await this.$store.dispatch("selectUser", userId);
+      } catch (error) {
+        console.log(error);
       }
-      this.selectedUser = data;
       this.isLoading = false;
     },
   },

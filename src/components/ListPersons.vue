@@ -16,7 +16,7 @@
         <tr v-for="user in users" :key="user.id" @click="handleRowClick(user.id)">
           <th scope="row">{{ user.email }}</th>
           <td>{{ user.name }}</td>
-          <td>{{ user.postalCode }}</td>
+          <td>{{ user.zipCode }}</td>
           <td>{{ user.city }}</td>
           <td>{{ user.phone }}</td>
         </tr>
@@ -37,30 +37,22 @@ export default {
     users() {
       return this.$store.getters["users"];
     },
-    userLink(id) {
-      return {
-        name: "user",
-        params: { userId: id },
-      };
-    },
   },
   methods: {
     handleRowClick(userId) {
       this.$router.push("/persons/" + userId);
     },
     async loadUsers() {
-      this.isLoading = true;
       try {
         await this.$store.dispatch("loadUsers");
       } catch (error) {
         this.error = error.message;
       }
-      this.isLoading = false;
     }
   },
   created() {
     this.loadUsers();
-  },
+  }
 };
 </script>
 

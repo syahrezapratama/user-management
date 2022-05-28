@@ -93,7 +93,12 @@
       <div class="row mb-3">
         <label for="userType" class="col-sm-3 col-form-label">Rechte</label>
         <div class="col-sm-8">
-          <select class="form-select" id="userType" name="userType" v-model="userType">
+          <select
+            class="form-select"
+            id="userType"
+            name="userType"
+            v-model="userType"
+          >
             <option value="normal">Normaler User</option>
             <option value="admin">Administrator</option>
           </select>
@@ -104,7 +109,9 @@
       </div>
     </form>
     <div class="row mt-3 justify-content-center">
-      <button class="btn btn-danger col-sm-4" @click="deleteUser">Löschen</button>
+      <button class="btn btn-danger col-sm-4" @click="deleteUser">
+        Löschen
+      </button>
     </div>
   </div>
 </template>
@@ -171,7 +178,7 @@ export default {
         city: this.city.value,
         phone: this.phone.value,
         password: this.password.value,
-        type: this.userType
+        type: this.userType,
       };
       console.log(updatedUserData);
       try {
@@ -182,59 +189,26 @@ export default {
         console.log(this.error);
       }
     },
-    async loadUserData(id) {
-      const userId = id;
-      const selectedUser = this.$store.getters["users"].find(
-        (user) => user.id === userId
-      );
-      this.id = userId;
-      this.email.value = selectedUser.email;
-      this.name.value = selectedUser.name;
-      this.postalCode.value = selectedUser.postalCode;
-      this.city.value = selectedUser.city;
-      this.phone.value = selectedUser.phone;
-      this.password.value = selectedUser.password;
-    },
     async deleteUser() {
       const userId = this.id;
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
-        method: "DELETE"
-      });
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
-        throw error;
-      }
+      this.$store.dispatch("deleteUser", userId);
       this.$router.replace("/persons");
     },
-    async loadUser(route) {
-      this.isLoading = true;
-      const userId = route.params.userId;
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`);
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (response.status !== 200) {
-        const error = new Error(
-          response.statusText || `Failed to load user with id: ${userId}.`
-        );
-        throw error;
-      }
-      this.id = data.id;
-      this.email.value = data.email;
-      this.name.value = data.name;
-      this.zipCode.value = data.zipCode;
-      this.city.value = data.city;
-      this.phone.value = data.phone;
-      this.password.value = data.password;
-      this.userType = data.type;
-      this.isLoading = false;
+  },
+  computed: {
+    selectedUser() {
+      return this.$store.getters["selectedUser"];
     },
   },
   created() {
-    this.loadUser(this.$route);
+    this.id = this.selectedUser.id;
+    this.email.value = this.selectedUser.email;
+    this.name.value = this.selectedUser.name;
+    this.zipCode.value = this.selectedUser.zipCode;
+    this.city.value = this.selectedUser.city;
+    this.phone.value = this.selectedUser.phone;
+    this.password.value = this.selectedUser.password;
+    this.userType = this.selectedUser.type;
   },
 };
 </script>

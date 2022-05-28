@@ -3,22 +3,27 @@
     <main class="row">
       <the-navigation v-if="userIsLoggedIn"></the-navigation>
       <router-view></router-view>
-      <!-- <user-data></user-data> -->
-      <!-- <registration-form></registration-form> -->
     </main>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      
-    };
+  mounted() {
+    this.loadUsers();
   },
   computed: {
     userIsLoggedIn() {
       return this.$store.getters.userIsLoggedIn;
+    }
+  },
+  methods: {
+    async loadUsers() {
+      try {
+        await this.$store.dispatch("loadUsers");
+      } catch (error) {
+        this.error = error.message;
+      }
     }
   }
 };

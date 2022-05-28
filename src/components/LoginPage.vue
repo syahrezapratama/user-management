@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="row mt-4 justify-content-center">
-          <button class="btn btn-primary col-sm-4">Registrieren</button>
+          <button class="btn btn-primary col-sm-4">Login</button>
         </div>
       </form>
       <div class="mt-5">
