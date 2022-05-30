@@ -191,8 +191,14 @@ export default {
     },
     async deleteUser() {
       const userId = this.id;
-      this.$store.dispatch("deleteUser", userId);
-      this.$router.replace("/persons");
+      try {
+        await this.$store.dispatch("deleteUser", userId);
+        this.$router.replace("/persons");
+      } catch (error) {
+        console.log(error)
+      }
+      // await this.$store.dispatch("deleteUser", userId);
+      //   this.$router.replace("/persons");
     },
   },
   computed: {

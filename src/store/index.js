@@ -147,8 +147,6 @@ const store = createStore({
       const userId = payload;
       const response = await fetch(`http://localhost:8081/api/users/${userId}`, { method: "DELETE" });
       console.log(response);
-      const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
         throw error;
