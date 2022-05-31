@@ -11,6 +11,7 @@ import EditUser from "../components/EditUser.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
 import RegistrationSuccess from "../components/RegistrationSuccess.vue";
 import LoginPage from "../components/LoginPage.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,7 +27,8 @@ const router = createRouter({
     { path: "/editUser/:userId", component: EditUser},
     { path: "/registration", component: RegistrationForm},
     { path: "/registrationSuccess", component: RegistrationSuccess}, 
-    { path: "/login", component: LoginPage }
+    { path: "/login", component: LoginPage },
+    { path: "/dialog", component: BaseDialog }
   ],
   linkActiveClass: "active",
 });

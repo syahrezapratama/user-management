@@ -113,6 +113,10 @@
         Löschen
       </button>
     </div>
+    <!-- <base-dialog
+      title="Bestätigung"
+      text="Möchten Sie den Datensatz wirklich löschen?"
+    ></base-dialog> -->
   </div>
 </template>
 
@@ -191,11 +195,14 @@ export default {
     },
     async deleteUser() {
       const userId = this.id;
-      try {
-        await this.$store.dispatch("deleteUser", userId);
-        this.$router.replace("/persons");
-      } catch (error) {
-        console.log(error)
+      const response = confirm("Möchten Sie den Datensatz wirklich löschen?");
+      if (response) {
+        try {
+          await this.$store.dispatch("deleteUser", userId);
+          this.$router.replace("/persons");
+        } catch (error) {
+          console.log(error);
+        }
       }
       // await this.$store.dispatch("deleteUser", userId);
       //   this.$router.replace("/persons");

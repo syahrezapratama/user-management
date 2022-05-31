@@ -11,6 +11,7 @@ import SearchPage from './components/SearchPage.vue';
 import LogoutPage from './components/LogoutPage.vue';
 import UserData from './components/UserData.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
+import BaseDialog from './components/BaseDialog.vue';
 
 const app = createApp(App);
 
@@ -24,4 +25,5 @@ app.component('search-page', SearchPage);
 app.component('logout-page', LogoutPage);
 app.component('user-data', UserData);
 app.component('registration-form', RegistrationForm);
+app.component('base-dialog', BaseDialog);
 app.mount('#app');

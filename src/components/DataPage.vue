@@ -191,7 +191,7 @@ export default {
       console.log(updatedUserData);
       try {
         await this.$store.dispatch("updateUserData", updatedUserData);
-        this.$router.replace("/home");
+        this.$router.replace("/updateSuccess");
       } catch (error) {
         this.error = error.message || "Failed to update data.";
         console.log(this.error);
