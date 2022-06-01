@@ -99,7 +99,7 @@ const store = createStore({
         body: JSON.stringify(userData),
       };
       const response = await fetch(
-        "http://localhost:8081/api/users/registerUser",
+        "http://localhost:8081/api/users/register",
         requestOptions
       );
       console.log(response);
