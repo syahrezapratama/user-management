@@ -58,7 +58,7 @@ export default {
     };
   },
   methods: {
-    validateLogin() {
+    validateForm() {
       this.formIsValid = true;
       if (this.email.value === "") {
         this.email.isValid = false;
@@ -70,11 +70,18 @@ export default {
       }
     },
     confirmLogin() {
-      this.validateLogin();
+      this.validateForm();
       this.$store.dispatch('logUserIn', true);
       console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);
       this.$router.replace('/home')
     },
+  // loginUser() {
+  //   const loginInfo = {
+  //     email: this.email.value,
+  //     password: this.password.value
+  //   },
+  //   this.$store.dispatch("loginUser", loginInfo);
+  // }
   },
   created() {
     console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);

@@ -1,7 +1,7 @@
 <template>
   <div class="container col-8">
     <h1>Search</h1>
-    <form>
+    <form @submit.prevent="searchUsers">
       <div class="row mb-3">
         <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
         <div class="col-sm-8">
@@ -81,7 +81,21 @@ export default {
     }
   },
   methods: {
-    searchUsers() {}
+    async searchUsers() {
+      const queries = {
+        email: this.email,
+        name: this.name,
+        zipCode: this.zipCode,
+        city: this.city,
+        phone: this.phone
+      };
+      console.log(queries);
+      try {
+        await this.$store.dispatch("searchUsers", queries);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 };
 </script>

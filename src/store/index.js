@@ -5,7 +5,9 @@ const store = createStore({
     return {
       userIsLoggedIn: false,
       users: [],
-      selectedUser: null
+      selectedUser: null,
+      currentUser: { name: "test user" },
+      searchResults: []
     };
   },
   getters: {
@@ -17,6 +19,9 @@ const store = createStore({
     },
     selectedUser(state) {
       return state.selectedUser;
+    },
+    searchResults(state) {
+      return state.searchResults;
     }
   },
   mutations: {
@@ -38,6 +43,15 @@ const store = createStore({
     },
     setSelectedUser(state, payload) {
       state.selectedUser = payload;
+    },
+    logoutUser(state) {
+      state.currentUser = {};
+    },
+    setCurrentUser(state, payload) {
+      state.currentUser = payload;
+    },
+    setSearchResults(state, payload) {
+      state.searchResults = payload;
     }
   },
   actions: {
@@ -46,7 +60,7 @@ const store = createStore({
       context.commit("logUserIn", payload);
     },
     async loadUsers(context) {
-      const response = await fetch("http://localhost:8081/api/users/allUsers");
+      const response = await fetch("http://localhost:8081/api/users");
       console.log(response);
       const data = await response.json();
       console.log(data);
@@ -74,7 +88,7 @@ const store = createStore({
     },
     async selectUser(context, payload) {
       const userId = payload;
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`);
+      const response = await fetch(`http://localhost:8081/api/user/${userId}`);
       console.log(response);
       const data = await response.json();
       console.log(data);
@@ -99,7 +113,7 @@ const store = createStore({
         body: JSON.stringify(userData),
       };
       const response = await fetch(
-        "http://localhost:8081/api/users/register",
+        "http://localhost:8081/api/register",
         requestOptions
       );
       console.log(response);
@@ -130,7 +144,7 @@ const store = createStore({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateUser)
       };
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`, requestOptions);
+      const response = await fetch(`http://localhost:8081/api/user/${userId}`, requestOptions);
       console.log(response);
       const data = await response.json();
       console.log(data);
@@ -145,7 +159,7 @@ const store = createStore({
     async deleteUser(context, payload) {
       // delete video in server
       const userId = payload;
-      const response = await fetch(`http://localhost:8081/api/users/${userId}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:8081/api/user/${userId}`, { method: "DELETE" });
       console.log(response);
       if (!response.ok) {
         const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
@@ -154,6 +168,32 @@ const store = createStore({
         // delete video in state
         context.commit("deleteUser", userId);
       }
+    },
+    async logoutUser(context) {
+      context.commit("logoutUser");
+    },
+    async loginUser(context, payload) {
+      // call api
+      context.commit("setCurrentUser", payload);
+    },
+    async searchUsers(context, payload) {
+      const params = {
+        email: payload.email,
+        name: payload.name,
+        zipCode: payload.zipCode,
+        city: payload.city,
+        phone: payload.phone
+      };
+      console.log(params);
+      const response = await fetch("http://localhost:8081/api/search?" + (new URLSearchParams(params)).toString());
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const error = new Error(response.statusText);
+        throw error;
+      }
+      context.commit("setSearchResults", data);
     }
   },
 });
