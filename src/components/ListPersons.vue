@@ -5,15 +5,19 @@
     <table class="table table-striped" v-else>
       <thead>
         <tr>
-          <th scope="col">E-Mail</th>
-          <th scope="col">Name</th>
-          <th scope="col">PLZ</th>
-          <th scope="col">Ort</th>
-          <th scope="col">Telefon</th>
+          <th scope="col" @click="sort('email')">E-Mail</th>
+          <th scope="col" @click="sort('name')">Name</th>
+          <th scope="col" @click="sort('zipCode')">PLZ</th>
+          <th scope="col" @click="sort('city')">Ort</th>
+          <th scope="col" @click="sort('phone')">Telefon</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id" @click="handleRowClick(user.id)">
+        <tr
+          v-for="user in sortedUsers"
+          :key="user.id"
+          @click="handleRowClick(user.id)"
+        >
           <th scope="row">{{ user.email }}</th>
           <td>{{ user.name }}</td>
           <td>{{ user.zipCode }}</td>
@@ -29,16 +33,32 @@
 export default {
   data() {
     return {
+      users: [],
       error: null,
-      isLoading: false
+      isLoading: false,
+      sortColumn: "email",
+      sortDirection: "asc",
     };
   },
   computed: {
-    users() {
-      return this.$store.getters["users"];
-    },
+    sortedUsers() {
+      const sortedUsers = [...this.users];
+      return sortedUsers.sort((a, b) => {
+        let modifier = 1;
+        if (this.sortDirection === "desc") modifier = -1;
+        if (a[this.sortColumn] < b[this.sortColumn]) return -1 * modifier;
+        if (a[this.sortColumn] > b[this.sortColumn]) return 1 * modifier;
+        return 0;
+      });
+    }
   },
   methods: {
+    sort(column) {
+      if (column === this.sortColumn) {
+        this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+      }
+      this.sortColumn = column;
+    },
     handleRowClick(userId) {
       this.$router.push("/persons/" + userId);
     },
@@ -48,11 +68,18 @@ export default {
       } catch (error) {
         this.error = error.message;
       }
-    }
+    },
   },
-  created() {
-    this.loadUsers();
-  }
+  async created() {
+    this.isLoading = true;
+    try {
+      await this.loadUsers()
+      this.users = this.$store.getters["users"];
+    } catch (error) {
+      console.log(error);
+    }
+    this.isLoading = false;
+  },
 };
 </script>
 
