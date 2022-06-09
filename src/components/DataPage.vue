@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="row mb-3" :class="{ invalid: !password.isValid }">
-        <label class="col-sm-3 col-form-label" for="password">Passwort</label>
+        <label class="col-sm-3 col-form-label" for="password">Neues Passwort</label>
         <div class="col-sm-8">
           <input
             class="form-control"
