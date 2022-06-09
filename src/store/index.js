@@ -7,7 +7,8 @@ const store = createStore({
       users: [],
       selectedUser: null,
       currentUser: { name: "test user" },
-      searchResults: []
+      searchResults: [],
+      errorMessage: null,
     };
   },
   getters: {
@@ -22,6 +23,9 @@ const store = createStore({
     },
     searchResults(state) {
       return state.searchResults;
+    },
+    errorMessage(state) {
+      return state.errorMessage;
     }
   },
   mutations: {
@@ -35,7 +39,7 @@ const store = createStore({
       state.users = payload;
     },
     deleteUser(state, payload) {
-      const users = state.users.filter(user => user.id != payload);
+      const users = state.users.filter((user) => user.id != payload);
       state.users = users;
     },
     logUserIn(state, payload) {
@@ -52,6 +56,9 @@ const store = createStore({
     },
     setSearchResults(state, payload) {
       state.searchResults = payload;
+    },
+    setErrorMessage(state, payload) {
+      state.errorMessage = payload
     }
   },
   actions: {
@@ -60,7 +67,9 @@ const store = createStore({
       context.commit("logUserIn", payload);
     },
     async loadUsers(context) {
-      const response = await fetch("http://localhost:8081/api/users/?limit=10&page=1");
+      const response = await fetch(
+        "http://localhost:8081/api/users/?limit=10&page=1"
+      );
       console.log(response);
       const data = await response.json();
       const result = data.results;
@@ -80,7 +89,7 @@ const store = createStore({
           zipCode: result[key].zipCode,
           city: result[key].city,
           phone: result[key].phone,
-          type: result[key].type
+          type: result[key].type,
         };
         users.push(user);
       }
@@ -93,7 +102,9 @@ const store = createStore({
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
-        const error = new Error(response.statusText || `Failed to load user with id: ${userId}.`);
+        const error = new Error(
+          response.statusText || `Failed to load user with id: ${userId}.`
+        );
         throw error;
       }
       context.commit("setSelectedUser", data);
@@ -117,13 +128,11 @@ const store = createStore({
         requestOptions
       );
       console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (response.status !== 201) {
-        const error = new Error(
-          response.statusText || "Failed to post new user."
-        );
-        throw error;
+      if (!response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const message = data.message;
+        throw new Error(message);
       }
       context.commit("registerUser", userData);
     },
@@ -137,18 +146,21 @@ const store = createStore({
         city: payload.city,
         phone: payload.phone,
         password: payload.password,
-        type: payload.type ? payload.type : "normal"
+        type: payload.type ? payload.type : "normal",
       };
       const requestOptions = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateUser)
+        body: JSON.stringify(updateUser),
       };
-      const response = await fetch(`http://localhost:8081/api/user/${userId}`, requestOptions);
+      const response = await fetch(
+        `http://localhost:8081/api/user/${userId}`,
+        requestOptions
+      );
       console.log(response);
       const data = await response.json();
       console.log(data);
-      if (response.status !== 200) {
+      if (!response.ok) {
         const error = new Error(
           response.statusText || `Failed to update user ${userId}.`
         );
@@ -159,10 +171,14 @@ const store = createStore({
     async deleteUser(context, payload) {
       // delete video in server
       const userId = payload;
-      const response = await fetch(`http://localhost:8081/api/user/${userId}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
+        method: "DELETE",
+      });
       console.log(response);
       if (!response.ok) {
-        const error = new Error(response.statusText || `Failed to delete user with id: ${userId}.`);
+        const error = new Error(
+          response.statusText || `Failed to delete user with id: ${userId}.`
+        );
         throw error;
       } else {
         // delete video in state
@@ -182,10 +198,13 @@ const store = createStore({
         name: payload.name,
         zipCode: payload.zipCode,
         city: payload.city,
-        phone: payload.phone
+        phone: payload.phone,
       };
       console.log(params);
-      const response = await fetch("http://localhost:8081/api/search?" + (new URLSearchParams(params)).toString());
+      const response = await fetch(
+        "http://localhost:8081/api/search?" +
+          new URLSearchParams(params).toString()
+      );
       console.log(response);
       const data = await response.json();
       console.log(data);
@@ -194,7 +213,7 @@ const store = createStore({
         throw error;
       }
       context.commit("setSearchResults", data);
-    }
+    },
   },
 });
 export default store;

@@ -136,7 +136,6 @@ export default {
         this.zipCode.value = selectedUser.zipCode;
         this.city.value = selectedUser.city;
         this.phone.value = selectedUser.phone;
-        this.password.value = selectedUser.password;
         this.userType = selectedUser.type;
       } catch (error) {
         console.log(error);
@@ -166,7 +165,7 @@ export default {
         this.formIsValid = false;
       }
       if (
-        this.password.value === "" ||
+        this.password.value !== "" &&
         this.password.value !== this.repeatPassword
       ) {
         this.password.isValid = false;

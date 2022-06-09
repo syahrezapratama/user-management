@@ -5,10 +5,13 @@
     </div>
     <div class="col-sm-8 mt-3">
       <form @submit.prevent="submitForm">
-        <div class="invalid"  v-if="!formIsValid">
+        <div class="invalid" v-if="error">
+          <p>{{ error }}</p>
+        </div>
+        <div class="invalid" v-if="!formIsValid">
           <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
         </div>
-        <div class="row mb-3" :class="{invalid: !email.isValid}">
+        <div class="row mb-3" :class="{ invalid: !email.isValid }">
           <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
           <div class="col-sm-6">
             <input
@@ -20,7 +23,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !name.isValid}">
+        <div class="row mb-3" :class="{ invalid: !name.isValid }">
           <label class="col-sm-3 col-form-label" for="name">Name</label>
           <div class="col-sm-6">
             <input
@@ -32,7 +35,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !zipCode.isValid}">
+        <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
           <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
           <div class="col-sm-6">
             <input
@@ -44,7 +47,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !city.isValid}">
+        <div class="row mb-3" :class="{ invalid: !city.isValid }">
           <label class="col-sm-3 col-form-label" for="city">Ort</label>
           <div class="col-sm-6">
             <input
@@ -56,7 +59,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !phone.isValid}">
+        <div class="row mb-3" :class="{ invalid: !phone.isValid }">
           <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
           <div class="col-sm-6">
             <input
@@ -68,7 +71,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !password.isValid}">
+        <div class="row mb-3" :class="{ invalid: !password.isValid }">
           <label class="col-sm-3 col-form-label" for="password">Passwort</label>
           <div class="col-sm-6">
             <input
@@ -80,7 +83,7 @@
             />
           </div>
         </div>
-        <div class="row mb-3" :class="{invalid: !password.isValid}">
+        <div class="row mb-3" :class="{ invalid: !password.isValid }">
           <label class="col-sm-3 col-form-label" for="repeatPassword"
             >Wiederholung</label
           >
@@ -93,7 +96,10 @@
             />
           </div>
         </div>
-        <div class="form-check mt-4 col-sm-7" :class="{invalid: !confirm.isValid}">
+        <div
+          class="form-check mt-4 col-sm-7"
+          :class="{ invalid: !confirm.isValid }"
+        >
           <input
             class="form-check-input"
             type="checkbox"
@@ -128,7 +134,7 @@ export default {
       repeatPassword: "",
       confirm: { value: false, isValid: true },
       formIsValid: true,
-      error: null
+      error: null,
     };
   },
   methods: {
@@ -157,7 +163,10 @@ export default {
         this.phone.isValid = false;
         this.formIsValid = false;
       }
-      if (this.password.value === "" || this.password.value !== this.repeatPassword) {
+      if (
+        this.password.value === "" ||
+        this.password.value !== this.repeatPassword
+      ) {
         this.password.isValid = false;
         this.formIsValid = false;
       }
@@ -168,6 +177,7 @@ export default {
     },
     async submitForm() {
       this.validateForm();
+      this.error = null;
       if (!this.formIsValid) {
         return;
       }
@@ -179,13 +189,12 @@ export default {
         phone: this.phone.value,
         password: this.password.value,
       };
-      console.log(newUserData);
       try {
-          await this.$store.dispatch('registerUser', newUserData);
-          this.$router.replace('/registrationSuccess')
-      } catch(error) {
-          this.error = error;
-          console.log(this.error)
+        await this.$store.dispatch("registerUser", newUserData);
+        this.$router.replace("/registrationSuccess");
+      } catch (error) {
+        this.error = error.message;
+        console.log(this.error);
       }
     },
   },
