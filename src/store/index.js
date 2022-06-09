@@ -60,10 +60,11 @@ const store = createStore({
       context.commit("logUserIn", payload);
     },
     async loadUsers(context) {
-      const response = await fetch("http://localhost:8081/api/users");
+      const response = await fetch("http://localhost:8081/api/users/?limit=10&page=1");
       console.log(response);
       const data = await response.json();
-      console.log(data);
+      const result = data.results;
+      console.log(result);
       if (!response.ok) {
         const error = new Error(
           response.statusText || "Failed to load users from API."
@@ -71,16 +72,15 @@ const store = createStore({
         throw error;
       }
       const users = [];
-      for (const key in data) {
+      for (const key in result) {
         const user = {
-          id: data[key].id,
-          email: data[key].email,
-          name: data[key].name,
-          zipCode: data[key].zipCode,
-          city: data[key].city,
-          phone: data[key].phone,
-          password: data[key].password,
-          type: data[key].type
+          id: result[key].id,
+          email: result[key].email,
+          name: result[key].name,
+          zipCode: result[key].zipCode,
+          city: result[key].city,
+          phone: result[key].phone,
+          type: result[key].type
         };
         users.push(user);
       }
