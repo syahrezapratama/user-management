@@ -9,7 +9,7 @@
             class="form-control"
             id="email"
             name="email"
-            type="email"
+            type="text"
             v-model="email"
           />
         </div>

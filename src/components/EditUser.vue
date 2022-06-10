@@ -161,10 +161,8 @@ export default {
         this.phone.isValid = false;
         this.formIsValid = false;
       }
-      if (
-        this.password.value === "" ||
-        this.password.value !== this.repeatPassword
-      ) {
+      if (this.password.value !== "" && this.password.value !== this.repeatPassword) {
+        console.log("password invalid");
         this.password.isValid = false;
         this.formIsValid = false;
       }
@@ -220,7 +218,6 @@ export default {
     this.zipCode.value = this.selectedUser.zipCode;
     this.city.value = this.selectedUser.city;
     this.phone.value = this.selectedUser.phone;
-    this.password.value = this.selectedUser.password;
     this.userType = this.selectedUser.type;
   },
 };

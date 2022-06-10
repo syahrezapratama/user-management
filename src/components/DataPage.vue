@@ -164,10 +164,7 @@ export default {
         this.phone.isValid = false;
         this.formIsValid = false;
       }
-      if (
-        this.password.value !== "" &&
-        this.password.value !== this.repeatPassword
-      ) {
+      if (this.password.value !== "" && this.password.value !== this.repeatPassword) {
         this.password.isValid = false;
         this.formIsValid = false;
       }
