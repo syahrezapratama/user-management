@@ -2,7 +2,7 @@
   <div class="container col-9">
     <h1>List Persons</h1>
     <p v-if="isLoading">Loading users...</p>
-    <table class="table table-striped" v-else>
+    <table class="table table-striped mb-4" v-else>
       <thead>
         <tr>
           <th scope="col" @click="sort('email')">E-Mail</th>
@@ -26,6 +26,23 @@
         </tr>
       </tbody>
     </table>
+    <nav>
+      <ul class="pagination justify-content-end">
+        <li class="page-item" :class="pages.previous ? '' : 'disabled' ">
+          <a class="page-link" href="#" aria-label="Previous" @click="loadUsers(pages.previous)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" v-if="pages.previous"><a class="page-link" href="#" @click="loadUsers(pages.previous)">{{ pages.previous }}</a></li>
+        <li class="page-item active"><a class="page-link" href="#">{{ pages.current }}</a></li>
+        <li class="page-item" v-if="pages.next"><a class="page-link" href="#" @click="loadUsers(pages.next)">{{ pages.next }}</a></li>
+        <li class="page-item" :class="pages.next ? '' : 'disabled'">
+          <a class="page-link" href="#" aria-label="Next" @click="loadUsers(pages.next)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -33,16 +50,23 @@
 export default {
   data() {
     return {
-      users: [],
+      // users: [],
       error: null,
       isLoading: false,
       sortColumn: "email",
       sortDirection: "asc",
+      options: {limit: 10, page: 1},
+      pages: {
+        current: 1,
+        previous: null,
+        next: null,
+      }
     };
   },
   computed: {
     sortedUsers() {
-      const sortedUsers = [...this.users];
+      const sortedUsers = this.$store.getters["users"];
+      // const sortedUsers = [...this.users];
       return sortedUsers.sort((a, b) => {
         let modifier = 1;
         if (this.sortDirection === "desc") modifier = -1;
@@ -50,7 +74,7 @@ export default {
         if (a[this.sortColumn] > b[this.sortColumn]) return 1 * modifier;
         return 0;
       });
-    }
+    },
   },
   methods: {
     sort(column) {
@@ -62,9 +86,10 @@ export default {
     handleRowClick(userId) {
       this.$router.push("/persons/" + userId);
     },
-    async loadUsers() {
+    async loadUsers(page) {
       try {
-        await this.$store.dispatch("loadUsers");
+        await this.$store.dispatch("loadUsers", page);
+        this.pages = await this.$store.getters["pages"];
       } catch (error) {
         this.error = error.message;
       }
@@ -73,18 +98,25 @@ export default {
   async created() {
     this.isLoading = true;
     try {
-      await this.loadUsers()
+      await this.loadUsers();
       this.users = this.$store.getters["users"];
+      this.pages = this.$store.getters["pages"];
     } catch (error) {
       console.log(error);
     }
     this.isLoading = false;
+    console.log(this.pages);
   },
 };
 </script>
 
-<style>
+<style scoped>
 tbody > tr:hover {
   cursor: pointer;
+}
+a:focus {
+  outline: none;
+  box-shadow: none;
+  background: none;
 }
 </style>

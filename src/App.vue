@@ -10,7 +10,7 @@
 <script>
 export default {
   mounted() {
-    this.loadUsers();
+    // this.loadUsers();
   },
   computed: {
     userIsLoggedIn() {

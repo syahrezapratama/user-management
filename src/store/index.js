@@ -5,6 +5,11 @@ const store = createStore({
     return {
       userIsLoggedIn: false,
       users: [],
+      pages: {
+        current: null,
+        previous: null,
+        next: null,
+      },
       selectedUser: null,
       currentUser: { name: "test user" },
       searchResults: [],
@@ -14,6 +19,9 @@ const store = createStore({
   getters: {
     users(state) {
       return state.users;
+    },
+    pages(state) {
+      return state.pages;
     },
     userIsLoggedIn(state) {
       return state.userIsLoggedIn;
@@ -26,11 +34,14 @@ const store = createStore({
     },
     errorMessage(state) {
       return state.errorMessage;
-    }
+    },
   },
   mutations: {
     setUsers(state, payload) {
       state.users = payload;
+    },
+    setPages(state, payload) {
+      state.pages = payload;
     },
     registerUser(state, payload) {
       state.users.push(payload);
@@ -66,9 +77,10 @@ const store = createStore({
       console.log(payload);
       context.commit("logUserIn", payload);
     },
-    async loadUsers(context) {
+    async loadUsers(context, payload) {
+      const page = payload ? payload : 1;
       const response = await fetch(
-        "http://localhost:8081/api/users/?limit=10&page=1"
+        `http://localhost:8081/api/users/?limit=10&page=${page}`
       );
       console.log(response);
       const data = await response.json();
@@ -94,6 +106,12 @@ const store = createStore({
         users.push(user);
       }
       context.commit("setUsers", users);
+      const pages = {
+        current: page,
+        previous: data.previous ? data.previous.page : null,
+        next: data.next ? data.next.page : null,
+      };
+      context.commit("setPages", pages);
     },
     async selectUser(context, payload) {
       const userId = payload;
