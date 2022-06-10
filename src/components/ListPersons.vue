@@ -50,7 +50,6 @@
 export default {
   data() {
     return {
-      // users: [],
       error: null,
       isLoading: false,
       sortColumn: "email",

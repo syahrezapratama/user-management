@@ -62,10 +62,37 @@
           />
         </div>
       </div>
-      <div class="row mt-5 justify-content-center">
+      <div class="row mt-4 justify-content-center">
         <button class="btn btn-primary col-sm-4">Suchen</button>
       </div>
     </form>
+    <div class="mt-5" v-if="searchResults.length !== 0">
+      <h1>Results</h1>
+      <table class="table table-striped mb-4">
+        <thead>
+          <tr>
+            <th scope="col">E-Mail</th>
+            <th scope="col">Name</th>
+            <th scope="col">PLZ</th>
+            <th scope="col">Ort</th>
+            <th scope="col">Telefon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in searchResults"
+            :key="user.id"
+            @click="handleRowClick(user.id)"
+          >
+            <th scope="row">{{ user.email }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.zipCode }}</td>
+            <td>{{ user.city }}</td>
+            <td>{{ user.phone }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -73,12 +100,19 @@
 export default {
   data() {
     return {
-      email: '',
-      name: '',
-      zipCode: '',
-      city: '',
-      phone: ''
-    }
+      email: "",
+      name: "",
+      zipCode: "",
+      city: "",
+      phone: "",
+      searchResults: [],
+      error: null,
+    };
+  },
+  computed: {
+    // searchResults() {
+    //   return this.$store.getters["searchResults"];
+    // }
   },
   methods: {
     async searchUsers() {
@@ -87,16 +121,41 @@ export default {
         name: this.name,
         zipCode: this.zipCode,
         city: this.city,
-        phone: this.phone
+        phone: this.phone,
       };
       console.log(queries);
       try {
-        await this.$store.dispatch("searchUsers", queries);
+        const response = await fetch(
+          "http://localhost:8081/api/search?" +
+            new URLSearchParams(queries).toString()
+        );
+        console.log(response);
+        const data = await response.json();
+        console.log(data);
+        if (!response.ok) {
+          const error = new Error(response.statusText);
+          throw error;
+        }
+        this.searchResults = data;
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+
+      // const queries = {
+      //   email: this.email,
+      //   name: this.name,
+      //   zipCode: this.zipCode,
+      //   city: this.city,
+      //   phone: this.phone
+      // };
+      // console.log(queries);
+      // try {
+      //   await this.$store.dispatch("searchUsers", queries);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    },
+  },
 };
 </script>
 
