@@ -5,11 +5,11 @@
     <table class="table table-striped mb-4" v-else>
       <thead>
         <tr>
-          <th scope="col" @click="sort('email')">E-Mail</th>
-          <th scope="col" @click="sort('name')">Name</th>
-          <th scope="col" @click="sort('zipCode')">PLZ</th>
-          <th scope="col" @click="sort('city')">Ort</th>
-          <th scope="col" @click="sort('phone')">Telefon</th>
+          <th scope="col" @click="sort('email')">E-Mail {{sortColumn === "email" && sortDirection === "asc" ? "&#42780;" : "&#42779;"}}</th>
+          <th scope="col" @click="sort('name')">Name {{sortColumn === "name" && sortDirection === "asc" ? "&#42780;" : "&#42779;"}}</th>
+          <th scope="col" @click="sort('zipCode')">PLZ {{sortColumn === "zipCode" && sortDirection === "asc" ? "&#42780;" : "&#42779;"}}</th>
+          <th scope="col" @click="sort('city')">Ort {{sortColumn === "city" && sortDirection === "asc" ? "&#42780;" : "&#42779;"}}</th>
+          <th scope="col" @click="sort('phone')">Telefon {{sortColumn === "phone" && sortDirection === "asc" ? "&#42780;" : "&#42779;"}}</th>
         </tr>
       </thead>
       <tbody>
@@ -65,7 +65,6 @@ export default {
   computed: {
     sortedUsers() {
       const sortedUsers = this.$store.getters["users"];
-      // const sortedUsers = [...this.users];
       return sortedUsers.sort((a, b) => {
         let modifier = 1;
         if (this.sortDirection === "desc") modifier = -1;
