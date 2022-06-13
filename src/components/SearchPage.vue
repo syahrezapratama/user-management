@@ -2,6 +2,9 @@
   <div class="container col-8">
     <h1>Search</h1>
     <form @submit.prevent="searchUsers">
+      <div class="invalid" v-if="!formIsValid">
+        <p>Bitte füllen Sie mindestens ein Feld aus</p>
+      </div>
       <div class="row mb-3">
         <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
         <div class="col-sm-8">
@@ -66,7 +69,7 @@
         <button class="btn btn-primary col-sm-4">Suchen</button>
       </div>
     </form>
-    <div class="mt-5" v-if="searchResults.length !== 0">
+    <div class="mt-5" v-if="searchResults.isFound && searchResults.values.length > 0">
       <h1>Results</h1>
       <table class="table table-striped mb-4">
         <thead>
@@ -80,7 +83,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="user in searchResults"
+            v-for="user in searchResults.values"
             :key="user.id"
             @click="handleRowClick(user.id)"
           >
@@ -92,6 +95,9 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="mt-5" v-if="searchResults.isFound && searchResults.values.length === 0">
+      <p>Keine Ergebnisse gefunden</p>
     </div>
   </div>
 </template>
@@ -105,17 +111,24 @@ export default {
       zipCode: "",
       city: "",
       phone: "",
-      searchResults: [],
+      searchResults: {
+        isFound: false,
+        values: []
+      },
       error: null,
+      formIsValid: true,
     };
   },
-  computed: {
-    // searchResults() {
-    //   return this.$store.getters["searchResults"];
-    // }
-  },
   methods: {
+    validateForm() {
+      this.formIsValid = true;
+      if (this.email === "" && this.name === "" && this.zipCode === "" && this.city === "" && this.phone === "") {
+        this.formIsValid = false;
+      }
+    },
     async searchUsers() {
+      this.validateForm();
+      if (!this.formIsValid) return;
       const queries = {
         email: this.email,
         name: this.name,
@@ -136,27 +149,19 @@ export default {
           const error = new Error(response.statusText);
           throw error;
         }
-        this.searchResults = data;
+        this.searchResults.isFound = true
+        this.searchResults.values = data;
       } catch (error) {
+        this.error = error;
         console.log(error);
       }
-
-      // const queries = {
-      //   email: this.email,
-      //   name: this.name,
-      //   zipCode: this.zipCode,
-      //   city: this.city,
-      //   phone: this.phone
-      // };
-      // console.log(queries);
-      // try {
-      //   await this.$store.dispatch("searchUsers", queries);
-      // } catch (error) {
-      //   console.log(error);
-      // }
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.invalid p {
+  color: red;
+}
+</style>
