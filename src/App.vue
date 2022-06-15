@@ -9,23 +9,11 @@
 
 <script>
 export default {
-  mounted() {
-    // this.loadUsers();
-  },
   computed: {
     userIsLoggedIn() {
-      return this.$store.getters.userIsLoggedIn;
+      return this.$store.getters.currentUser.token;
     }
   },
-  methods: {
-    async loadUsers() {
-      try {
-        await this.$store.dispatch("loadUsers");
-      } catch (error) {
-        this.error = error.message;
-      }
-    }
-  }
 };
 </script>
 

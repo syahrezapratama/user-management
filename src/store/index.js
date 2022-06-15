@@ -3,7 +3,6 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      userIsLoggedIn: true,
       users: [],
       pages: {
         current: null,
@@ -11,9 +10,13 @@ const store = createStore({
         next: null,
       },
       selectedUser: null,
-      currentUser: { name: "test user" },
+      currentUser: {
+        id: null,
+        email: null,
+        name: null,
+        token: null
+      },
       searchResults: [],
-      errorMessage: null,
     };
   },
   getters: {
@@ -29,11 +32,8 @@ const store = createStore({
     selectedUser(state) {
       return state.selectedUser;
     },
-    searchResults(state) {
-      return state.searchResults;
-    },
-    errorMessage(state) {
-      return state.errorMessage;
+    currentUser(state) {
+      return state.currentUser;
     },
   },
   mutations: {
@@ -53,34 +53,33 @@ const store = createStore({
       const users = state.users.filter((user) => user.id != payload);
       state.users = users;
     },
-    logUserIn(state, payload) {
-      state.userIsLoggedIn = payload;
-    },
     setSelectedUser(state, payload) {
       state.selectedUser = payload;
     },
     logoutUser(state) {
-      state.currentUser = {};
+      state.currentUser.id = null;
+      state.currentUser.email = null;
+      state.currentUser.name = null;
+      state.currentUser.token = null;
+      localStorage.removeItem('token');
     },
     setCurrentUser(state, payload) {
-      state.currentUser = payload;
+      state.currentUser.id = payload.id;
+      state.currentUser.email = payload.email;
+      state.currentUser.name = payload.name;
+      state.currentUser.token = payload.accessToken;
+      localStorage.setItem('token', payload.accessToken);
     },
-    setSearchResults(state, payload) {
-      state.searchResults = payload;
-    },
-    setErrorMessage(state, payload) {
-      state.errorMessage = payload
-    }
   },
   actions: {
-    logUserIn(context, payload) {
-      console.log(payload);
-      context.commit("logUserIn", payload);
-    },
     async loadUsers(context, payload) {
       const page = payload ? payload : 1;
       const response = await fetch(
-        `http://localhost:8081/api/users/?limit=10&page=${page}`
+        `http://localhost:8081/api/users/?limit=10&page=${page}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }
       );
       console.log(response);
       const data = await response.json();
@@ -146,11 +145,11 @@ const store = createStore({
         requestOptions
       );
       console.log(response);
+      const data = await response.json();
+      console.log(data)
       if (!response.ok) {
-        const data = await response.json();
-        console.log(data);
         const message = data.message;
-        throw new Error(message);
+        throw new Error(message || "Cannot register");
       }
       context.commit("registerUser", userData);
     },
@@ -187,7 +186,6 @@ const store = createStore({
       context.commit("updateUser", updateUser);
     },
     async deleteUser(context, payload) {
-      // delete video in server
       const userId = payload;
       const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
         method: "DELETE",
@@ -199,7 +197,6 @@ const store = createStore({
         );
         throw error;
       } else {
-        // delete video in state
         context.commit("deleteUser", userId);
       }
     },
@@ -207,8 +204,20 @@ const store = createStore({
       context.commit("logoutUser");
     },
     async loginUser(context, payload) {
-      // call api
-      context.commit("setCurrentUser", payload);
+      const response = await fetch("http://localhost:8081/api/login", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        const message = data.message;
+        throw new Error(message);
+      }
+      context.commit("setCurrentUser", data);
     },
     async searchUsers(context, payload) {
       const params = {

@@ -4,6 +4,9 @@
       <h1>Login</h1>
     </div>
     <div class="col-sm-8">
+      <div class="invalid" v-if="error">
+          <p>{{ error }}</p>
+        </div>
       <div class="invalid" v-if="!formIsValid">
         <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
       </div>
@@ -69,23 +72,22 @@ export default {
         this.formIsValid = false;
       }
     },
-    confirmLogin() {
+    async confirmLogin() {
       this.validateForm();
-      this.$store.dispatch('logUserIn', true);
-      console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);
-      this.$router.replace('/home')
+      if (!this.formIsValid) return;
+      const loginInfo = {
+        email: this.email.value,
+        password: this.password.value
+      };
+      try {
+        await this.$store.dispatch("loginUser", loginInfo);
+        this.$router.replace("/home");
+      } catch (error) {
+        this.error = error.message;
+        console.log(this.error);
+      }
     },
-  // loginUser() {
-  //   const loginInfo = {
-  //     email: this.email.value,
-  //     password: this.password.value
-  //   },
-  //   this.$store.dispatch("loginUser", loginInfo);
-  // }
   },
-  created() {
-    console.log('User logged in: ' + this.$store.getters.userIsLoggedIn);
-  }
 };
 </script>
 

@@ -23,8 +23,8 @@
 export default {
   methods: {
     logout() {
-      this.$store.dispatch('logUserIn', false);
-      // this.$souter.replace('/login');
+      this.$store.dispatch('logoutUser');
+      this.$router.replace("/login");
     }
   }
 };

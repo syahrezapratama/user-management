@@ -194,7 +194,7 @@ export default {
         this.$router.replace("/registrationSuccess");
       } catch (error) {
         this.error = error.message;
-        console.log(this.error);
+        console.log(error);
       }
     },
   },

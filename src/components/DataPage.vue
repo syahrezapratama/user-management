@@ -103,7 +103,7 @@
 export default {
   data() {
     return {
-      userId: 1,
+      userId: null,
       email: { value: "", isValid: true },
       name: { value: "", isValid: true },
       zipCode: { value: "", isValid: true },
@@ -118,6 +118,7 @@ export default {
     };
   },
   created() {
+    this.userId = this.$store.getters.currentUser.id;
     this.loadUser(this.userId);
   },
   computed: {
