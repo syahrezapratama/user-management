@@ -11,9 +11,22 @@
 export default {
   computed: {
     userIsLoggedIn() {
-      return this.$store.getters.currentUser.token;
+      return this.$store.getters.isAuthenticated;
+    },
+    didAutoLogout() {
+      return this.$store.getters.didAutoLogout;
     }
   },
+  created() {
+    this.$store.dispatch("tryLogin");
+  },
+  watch: {
+    didAutoLogout(currentVal, oldVal) {
+      if (currentVal && currentVal !== oldVal) {
+        this.$router.replace("/login");
+      }
+    }
+  }
 };
 </script>
 

@@ -1,14 +1,11 @@
 import { createStore } from "vuex";
 
+let timer;
+
 const store = createStore({
   state() {
     return {
       users: [],
-      pages: {
-        current: null,
-        previous: null,
-        next: null,
-      },
       selectedUser: null,
       currentUser: {
         id: null,
@@ -18,6 +15,12 @@ const store = createStore({
         type: null
       },
       searchResults: [],
+      pages: {
+        current: null,
+        previous: null,
+        next: null,
+      },
+      didAutoLogout: false
     };
   },
   getters: {
@@ -27,15 +30,18 @@ const store = createStore({
     pages(state) {
       return state.pages;
     },
-    userIsLoggedIn(state) {
-      return state.userIsLoggedIn;
-    },
     selectedUser(state) {
       return state.selectedUser;
     },
     currentUser(state) {
       return state.currentUser;
     },
+    isAuthenticated(state) {
+      return !!state.currentUser.token;
+    },
+    didAutoLogout(state) {
+      return state.didAutoLogout;
+    }
   },
   mutations: {
     setUsers(state, payload) {
@@ -57,22 +63,17 @@ const store = createStore({
     setSelectedUser(state, payload) {
       state.selectedUser = payload;
     },
-    logoutUser(state) {
-      state.currentUser.id = null;
-      state.currentUser.email = null;
-      state.currentUser.name = null;
-      state.currentUser.token = null;
-      localStorage.removeItem('token');
-      state.currentUser.type = null;
-    },
     setCurrentUser(state, payload) {
       state.currentUser.id = payload.id;
       state.currentUser.email = payload.email;
       state.currentUser.name = payload.name;
       state.currentUser.token = payload.accessToken;
-      localStorage.setItem('token', payload.accessToken);
       state.currentUser.type = payload.type;
+      state.didAutoLogout = false;
     },
+    setAutoLogout(state) {
+      state.didAutoLogout = true;
+    }
   },
   actions: {
     async loadUsers(context, payload) {
@@ -207,8 +208,27 @@ const store = createStore({
         context.commit("deleteUser", userId);
       }
     },
-    async logoutUser(context) {
-      context.commit("logoutUser");
+    logoutUser(context) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("email");
+      localStorage.removeItem("name");
+      localStorage.removeItem("type");
+      localStorage.removeItem("tokenExpiration");
+
+      clearTimeout(timer);
+
+      context.commit("setCurrentUser", {
+        id: null,
+        email: null,
+        name: null,
+        type: null,
+        accessToken: null
+      });
+    },
+    autoLogout(context) {
+      context.dispatch("logoutUser");
+      context.commit("setAutoLogout")
     },
     async loginUser(context, payload) {
       const response = await fetch("http://localhost:8081/api/login", {
@@ -224,6 +244,21 @@ const store = createStore({
         const message = data.message;
         throw new Error(message);
       }
+
+      const expiresIn = 10 * 60000; // expires in 10 minutes (initally)
+      const expirationDate = new Date().getTime() + expiresIn;
+
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("type", data.type);
+      localStorage.setItem("tokenExpiration", expirationDate);
+
+      timer = setTimeout(() => {
+        context.dispatch("autoLogout");
+      }, expiresIn);
+
       context.commit("setCurrentUser", data);
     },
     async searchUsers(context, payload) {
@@ -248,6 +283,33 @@ const store = createStore({
       }
       context.commit("setSearchResults", data);
     },
+    tryLogin(context) {
+      const accessToken = localStorage.getItem("token");
+      const id = localStorage.getItem("userId");
+      const email = localStorage.getItem("email");
+      const name = localStorage.getItem("name");
+      const type = localStorage.getItem("type");
+
+      const tokenExpiration = localStorage.getItem("tokenExpiration");
+      const expiresIn = +tokenExpiration - new Date().getTime();
+
+      if (expiresIn < 0) {
+        return;
+      }
+      timer = setTimeout(() => {
+        context.dispatch("autoLogout")
+      }, expiresIn);
+
+      if(accessToken && id && email && name && type) {
+        context.commit("setCurrentUser", {
+          id: id,
+          email: email,
+          name: name,
+          accessToken: accessToken,
+          type: type
+        })
+      }
+    }
   },
 });
 export default store;

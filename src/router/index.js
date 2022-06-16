@@ -12,25 +12,36 @@ import RegistrationForm from "../components/RegistrationForm.vue";
 import RegistrationSuccess from "../components/RegistrationSuccess.vue";
 import LoginPage from "../components/LoginPage.vue";
 import BaseDialog from "../components/BaseDialog.vue";
+import store from "../store/index.js";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: "/", redirect: "/home" },
-    { path: "/home", component: HomePage },
-    { path: "/mydata", component: DataPage },
-    { path: "/persons", component: ListPersons },
-    { path: "/search", component: SearchPage },
+    { path: "/home", component: HomePage, meta: { requiresAuth: true } },
+    { path: "/mydata", component: DataPage, meta: { requiresAuth: true } },
+    { path: "/persons", component: ListPersons, meta: { requiresAuth: true } },
+    { path: "/search", component: SearchPage, meta: { requiresAuth: true } },
     { path: "/logout", component: LogoutPage },
     { path: "/updateSuccess", component: SuccessDialog },
-    { path: "/persons/:userId", component: UserData },
-    { path: "/editUser/:userId", component: EditUser},
-    { path: "/registration", component: RegistrationForm},
-    { path: "/registrationSuccess", component: RegistrationSuccess}, 
-    { path: "/login", component: LoginPage },
-    { path: "/dialog", component: BaseDialog }
+    { path: "/persons/:userId", component: UserData, meta: { requiresAuth: true } },
+    { path: "/editUser/:userId", component: EditUser, meta: { requiresAuth: true }},
+    { path: "/registration", component: RegistrationForm, meta: { requiresUnauth: true } },
+    { path: "/registrationSuccess", component: RegistrationSuccess }, 
+    { path: "/login", component: LoginPage, meta: { requiresUnauth: true } },
+    { path: "/dialog", component: BaseDialog },
   ],
   linkActiveClass: "active",
+});
+
+router.beforeEach(function(to, from, next){
+  if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+    next("/login");
+  } else if (to.meta.requiresUnauth && store.getters.isAuthenticated) {
+    next("/home");
+  } else {
+    next();
+  }
 });
 
 export default router;
