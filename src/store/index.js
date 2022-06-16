@@ -14,7 +14,8 @@ const store = createStore({
         id: null,
         email: null,
         name: null,
-        token: null
+        token: null,
+        type: null
       },
       searchResults: [],
     };
@@ -62,6 +63,7 @@ const store = createStore({
       state.currentUser.name = null;
       state.currentUser.token = null;
       localStorage.removeItem('token');
+      state.currentUser.type = null;
     },
     setCurrentUser(state, payload) {
       state.currentUser.id = payload.id;
@@ -69,6 +71,7 @@ const store = createStore({
       state.currentUser.name = payload.name;
       state.currentUser.token = payload.accessToken;
       localStorage.setItem('token', payload.accessToken);
+      state.currentUser.type = payload.type;
     },
   },
   actions: {
@@ -114,7 +117,11 @@ const store = createStore({
     },
     async selectUser(context, payload) {
       const userId = payload;
-      const response = await fetch(`http://localhost:8081/api/user/${userId}`);
+      const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       console.log(response);
       const data = await response.json();
       console.log(data);
@@ -155,7 +162,6 @@ const store = createStore({
     },
     async updateUserData(context, payload) {
       const userId = payload.id;
-      // let updateUser = context.getters.users.find((user) => user.id === userId);
       const updateUser = {
         email: payload.email,
         name: payload.name,
@@ -165,9 +171,10 @@ const store = createStore({
         password: payload.password,
         type: payload.type ? payload.type : "normal",
       };
+      const bearerToken = "Bearer " + localStorage.getItem("token");
       const requestOptions = {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": bearerToken },
         body: JSON.stringify(updateUser),
       };
       const response = await fetch(

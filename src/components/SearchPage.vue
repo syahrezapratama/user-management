@@ -138,9 +138,12 @@ export default {
       };
       console.log(queries);
       try {
+        const bearerToken = this.$store.getters.currentUser.token;
         const response = await fetch(
           "http://localhost:8081/api/search?" +
-            new URLSearchParams(queries).toString()
+            new URLSearchParams(queries).toString(), {
+              headers: { "Authorization" : "Bearer " + bearerToken }
+            }
         );
         console.log(response);
         const data = await response.json();
@@ -156,6 +159,9 @@ export default {
         console.log(error);
       }
     },
+    handleRowClick(userId) {
+      this.$router.push("/persons/" + userId);
+    }
   },
 };
 </script>
@@ -163,5 +169,8 @@ export default {
 <style scoped>
 .invalid p {
   color: red;
+}
+tbody > tr:hover {
+  cursor: pointer;
 }
 </style>

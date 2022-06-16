@@ -42,7 +42,7 @@
           <p>{{ selectedUser.phone }}</p>
         </div>
       </div>
-      <div class="row mt-5 justify-content-center">
+      <div class="row mt-5 justify-content-center" v-if="isAdmin">
         <router-link :to="userDataLink">
           <button class="btn btn-primary col-sm-4">Bearbeiten</button>
         </router-link>
@@ -68,6 +68,9 @@ export default {
     userDataLink() {
       return "/editUser/" + this.selectedUser.id;
     },
+    isAdmin() {
+      return this.$store.getters.currentUser.type === "admin"
+    }
   },
   methods: {
     async loadUser(route) {
