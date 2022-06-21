@@ -12,6 +12,8 @@ import RegistrationForm from "../components/RegistrationForm.vue";
 import RegistrationSuccess from "../components/RegistrationSuccess.vue";
 import LoginPage from "../components/LoginPage.vue";
 import BaseDialog from "../components/BaseDialog.vue";
+import EmailVerified from "../components/EmailVerified.vue";
+
 import store from "../store/index.js";
 
 const router = createRouter({
@@ -30,6 +32,7 @@ const router = createRouter({
     { path: "/registrationSuccess", component: RegistrationSuccess }, 
     { path: "/login", component: LoginPage, meta: { requiresUnauth: true } },
     { path: "/dialog", component: BaseDialog },
+    { path: "/verify/:verificationToken", component: EmailVerified, meta: {requiresUnauth: true} }
   ],
   linkActiveClass: "active",
 });

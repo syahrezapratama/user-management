@@ -195,8 +195,10 @@ const store = createStore({
     },
     async deleteUser(context, payload) {
       const userId = payload;
+      const bearerToken = "Bearer " + localStorage.getItem("token");
       const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
         method: "DELETE",
+        headers: { "Authorization": bearerToken }
       });
       console.log(response);
       if (!response.ok) {
@@ -245,7 +247,7 @@ const store = createStore({
         throw new Error(message);
       }
 
-      const expiresIn = 10 * 60000; // expires in 10 minutes (initally)
+      const expiresIn = 10 * 60000; // expires in 10 minutes (initially)
       const expirationDate = new Date().getTime() + expiresIn;
 
       localStorage.setItem("token", data.accessToken);
