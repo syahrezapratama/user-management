@@ -36,6 +36,9 @@ const store = createStore({
     currentUser(state) {
       return state.currentUser;
     },
+    searchResults(state) {
+      return state.searchResults;
+    },
     isAuthenticated(state) {
       return !!state.currentUser.token;
     },
@@ -49,6 +52,9 @@ const store = createStore({
     },
     setPages(state, payload) {
       state.pages = payload;
+    },
+    setSearchResults(state, payload) {
+      state.searchResults = payload;
     },
     registerUser(state, payload) {
       state.users.push(payload);
@@ -115,6 +121,23 @@ const store = createStore({
         next: data.next ? data.next.page : null,
       };
       context.commit("setPages", pages);
+    },
+    async searchUsers(context, payload) {
+      const bearerToken = localStorage.getItem('token');
+      const response = await fetch(
+        "http://localhost:8081/api/search?" +
+          new URLSearchParams(payload).toString(), {
+            headers: { "Authorization" : "Bearer " + bearerToken }
+          }
+      );
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      if(!response.ok) {
+        const error = new Error(response.statusText || "Failed to search.");
+        throw error;
+      }
+      context.commit("setSearchResults", data);
     },
     async selectUser(context, payload) {
       const userId = payload;
@@ -262,28 +285,6 @@ const store = createStore({
       }, expiresIn);
 
       context.commit("setCurrentUser", data);
-    },
-    async searchUsers(context, payload) {
-      const params = {
-        email: payload.email,
-        name: payload.name,
-        zipCode: payload.zipCode,
-        city: payload.city,
-        phone: payload.phone,
-      };
-      console.log(params);
-      const response = await fetch(
-        "http://localhost:8081/api/search?" +
-          new URLSearchParams(params).toString()
-      );
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        const error = new Error(response.statusText);
-        throw error;
-      }
-      context.commit("setSearchResults", data);
     },
     tryLogin(context) {
       const accessToken = localStorage.getItem("token");

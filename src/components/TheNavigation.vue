@@ -3,10 +3,10 @@
     <nav>
       <ul class="nav flex-column nav-pills">
         <li class="nav-item">
-          <router-link class="nav-link" to="/mydata">My Data</router-link>
+          <router-link class="nav-link" :to="currentUserId">My Data</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/persons">List Persons</router-link>
+          <router-link class="nav-link" to="/users">List Persons</router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/search">Search</router-link>
@@ -24,17 +24,16 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logoutUser');
-      this.$router.replace("/login");
+      this.$router.replace("/logout");
+    }
+  },
+  computed: {
+    currentUserId() {
+      return `/user/${this.$store.getters.currentUser.id}`;
     }
   }
 };
 </script>
 
 <style>
-/* header {
-  min-width: 300px;
-}
-ul {
-    list-style: none;
-} */
 </style>

@@ -82,7 +82,7 @@ export default {
       this.sortColumn = column;
     },
     handleRowClick(userId) {
-      this.$router.push("/persons/" + userId);
+      this.$router.push("/users/" + userId);
     },
     async loadUsers(page) {
       try {

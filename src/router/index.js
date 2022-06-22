@@ -5,11 +5,9 @@ import DataPage from "../components/DataPage.vue";
 import ListPersons from "../components/ListPersons.vue";
 import SearchPage from "../components/SearchPage.vue";
 import LogoutPage from "../components/LogoutPage.vue";
-import SuccessDialog from "../components/SuccessDialog.vue";
 import UserData from "../components/UserData.vue";
 import EditUser from "../components/EditUser.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
-import RegistrationSuccess from "../components/RegistrationSuccess.vue";
 import LoginPage from "../components/LoginPage.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import EmailVerified from "../components/EmailVerified.vue";
@@ -21,15 +19,13 @@ const router = createRouter({
   routes: [
     { path: "/", redirect: "/home" },
     { path: "/home", component: HomePage, meta: { requiresAuth: true } },
-    { path: "/mydata", component: DataPage, meta: { requiresAuth: true } },
-    { path: "/persons", component: ListPersons, meta: { requiresAuth: true } },
+    { path: "/user/:userId", component: DataPage, meta: { requiresAuth: true } },
+    { path: "/users", component: ListPersons, meta: { requiresAuth: true } },
     { path: "/search", component: SearchPage, meta: { requiresAuth: true } },
-    { path: "/logout", component: LogoutPage },
-    { path: "/updateSuccess", component: SuccessDialog },
-    { path: "/persons/:userId", component: UserData, meta: { requiresAuth: true } },
-    { path: "/editUser/:userId", component: EditUser, meta: { requiresAuth: true }},
-    { path: "/registration", component: RegistrationForm, meta: { requiresUnauth: true } },
-    { path: "/registrationSuccess", component: RegistrationSuccess }, 
+    { path: "/logout", component: LogoutPage, meta: { requiresUnauth: true } },
+    { path: "/users/:userId", component: UserData, meta: { requiresAuth: true } },
+    { path: "/edit/:userId", component: EditUser, meta: { requiresAuth: true }},
+    { path: "/register", component: RegistrationForm, meta: { requiresUnauth: true } },
     { path: "/login", component: LoginPage, meta: { requiresUnauth: true } },
     { path: "/dialog", component: BaseDialog },
     { path: "/verify/:verificationToken", component: EmailVerified, meta: {requiresUnauth: true} }

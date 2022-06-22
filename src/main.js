@@ -5,13 +5,6 @@ import store from './store'
 
 import HomePage from './components/HomePage.vue';
 import TheNavigation from './components/TheNavigation.vue';
-import DataPage from './components/DataPage.vue';
-import ListPersons from './components/ListPersons.vue';
-import SearchPage from './components/SearchPage.vue';
-import LogoutPage from './components/LogoutPage.vue';
-import UserData from './components/UserData.vue';
-import RegistrationForm from './components/RegistrationForm.vue';
-import BaseDialog from './components/BaseDialog.vue';
 
 const app = createApp(App);
 
@@ -19,11 +12,4 @@ app.use(store);
 app.use(router);
 app.component('home-page', HomePage);
 app.component('the-navigation', TheNavigation);
-app.component('data-page', DataPage);
-app.component('list-persons', ListPersons)
-app.component('search-page', SearchPage);
-app.component('logout-page', LogoutPage);
-app.component('user-data', UserData);
-app.component('registration-form', RegistrationForm);
-app.component('base-dialog', BaseDialog);
 app.mount('#app');

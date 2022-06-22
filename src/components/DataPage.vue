@@ -1,101 +1,112 @@
 <template>
-  <div class="container col-8">
-    <h1>My Data</h1>
+  <div class="container col-10">
     <p v-if="isLoading">Loading...</p>
-    <form v-else @submit.prevent="submitForm">
-      <div class="invalid" v-if="!formIsValid">
-        <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !email.isValid }">
-        <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="email"
-            name="email"
-            type="email"
-            v-model="email.value"
-          />
+    <div class="container col-8" v-if="!isLoading && updateDone">
+      <p>Die Daten wurden erfolgreich aktualisiert.</p>
+      <p>
+        Bitte <router-link to="" @click="() => {updateDone = false}">klicken Sie hier</router-link> um die
+        aktualisierten Daten aufzurufen.
+      </p>
+    </div>
+    <div class="container col-8" v-else>
+      <h1>My Data</h1>
+      <form @submit.prevent="submitForm">
+        <div class="invalid" v-if="!formIsValid">
+          <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !name.isValid }">
-        <label class="col-sm-3 col-form-label" for="name">Name</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="name"
-            name="name"
-            type="text"
-            v-model="name.value"
-          />
+        <div class="row mb-3" :class="{ invalid: !email.isValid }">
+          <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="email"
+              name="email"
+              type="email"
+              v-model="email.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
-        <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="postalCode"
-            name="postalCode"
-            type="text"
-            v-model="zipCode.value"
-          />
+        <div class="row mb-3" :class="{ invalid: !name.isValid }">
+          <label class="col-sm-3 col-form-label" for="name">Name</label>
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="name"
+              name="name"
+              type="text"
+              v-model="name.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !city.isValid }">
-        <label class="col-sm-3 col-form-label" for="city">Ort</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="city"
-            name="city"
-            type="text"
-            v-model="city.value"
-          />
+        <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
+          <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="postalCode"
+              name="postalCode"
+              type="text"
+              v-model="zipCode.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !phone.isValid }">
-        <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="phone"
-            name="phone"
-            type="text"
-            v-model="phone.value"
-          />
+        <div class="row mb-3" :class="{ invalid: !city.isValid }">
+          <label class="col-sm-3 col-form-label" for="city">Ort</label>
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="city"
+              name="city"
+              type="text"
+              v-model="city.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !password.isValid }">
-        <label class="col-sm-3 col-form-label" for="password">Neues Passwort</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="password"
-            name="password"
-            type="password"
-            v-model="password.value"
-          />
+        <div class="row mb-3" :class="{ invalid: !phone.isValid }">
+          <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="phone"
+              name="phone"
+              type="text"
+              v-model="phone.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mb-3" :class="{ invalid: !password.isValid }">
-        <label class="col-sm-3 col-form-label" for="repeatPassword"
-          >Wiederholung</label
-        >
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="repeatPassword"
-            name="repeatPassword"
-            type="password"
-            v-model="repeatPassword"
-          />
+        <div class="row mb-3" :class="{ invalid: !password.isValid }">
+          <label class="col-sm-3 col-form-label" for="password"
+            >Neues Passwort</label
+          >
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="password"
+              name="password"
+              type="password"
+              v-model="password.value"
+            />
+          </div>
         </div>
-      </div>
-      <div class="row mt-5 justify-content-center">
-        <button class="btn btn-primary col-sm-4">Aktualisieren</button>
-      </div>
-    </form>
+        <div class="row mb-3" :class="{ invalid: !password.isValid }">
+          <label class="col-sm-3 col-form-label" for="repeatPassword"
+            >Wiederholung</label
+          >
+          <div class="col-sm-8">
+            <input
+              class="form-control"
+              id="repeatPassword"
+              name="repeatPassword"
+              type="password"
+              v-model="repeatPassword"
+            />
+          </div>
+        </div>
+        <div class="row mt-5 justify-content-center">
+          <button class="btn btn-primary col-sm-4">Aktualisieren</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -115,10 +126,11 @@ export default {
       formIsValid: true,
       error: null,
       isLoading: false,
+      updateDone: false,
     };
   },
   created() {
-    this.userId = this.$store.getters.currentUser.id;
+    this.userId = this.$route.params.userId;
     this.loadUser(this.userId);
   },
   computed: {
@@ -165,7 +177,10 @@ export default {
         this.phone.isValid = false;
         this.formIsValid = false;
       }
-      if (this.password.value !== "" && this.password.value !== this.repeatPassword) {
+      if (
+        this.password.value !== "" &&
+        this.password.value !== this.repeatPassword
+      ) {
         this.password.isValid = false;
         this.formIsValid = false;
       }
@@ -188,7 +203,7 @@ export default {
       console.log(updatedUserData);
       try {
         await this.$store.dispatch("updateUserData", updatedUserData);
-        this.$router.replace("/updateSuccess");
+        this.updateDone = true;
       } catch (error) {
         this.error = error.message || "Failed to update data.";
         console.log(this.error);

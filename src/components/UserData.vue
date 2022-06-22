@@ -66,7 +66,7 @@ export default {
       return this.$store.getters["selectedUser"];
     },
     userDataLink() {
-      return "/editUser/" + this.selectedUser.id;
+      return "/edit/" + this.selectedUser.id;
     },
     isAdmin() {
       return this.$store.getters.currentUser.type === "admin"
@@ -82,11 +82,6 @@ export default {
         console.log(error);
       }
       this.isLoading = false;
-    },
-  },
-  watch: {
-    $route(newRoute) {
-      this.loadUser(newRoute);
     },
   },
 };

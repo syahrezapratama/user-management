@@ -42,7 +42,7 @@
       <div class="mt-5">
         <p>Noch nicht angemeldet?</p>
         <p>
-          <router-link to="/registration">Hier klicken</router-link> um sich zu
+          <router-link to="/register">Hier klicken</router-link> um sich zu
           registrieren.
         </p>
       </div>
