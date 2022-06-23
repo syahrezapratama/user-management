@@ -1,6 +1,6 @@
 <template>
-  <div class="app container">
-    <main class="row">
+  <div class="app">
+    <main>
       <the-navigation v-if="userIsLoggedIn"></the-navigation>
       <router-view></router-view>
     </main>
@@ -43,7 +43,7 @@ body {
   margin: 0;
 }
 
-div.app {
+/* div.app {
   padding-top: 50px;
-}
+} */
 </style>

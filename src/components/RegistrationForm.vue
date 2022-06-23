@@ -1,110 +1,121 @@
 <template>
-  <div>
-    <div class="row mt-5" v-if="registrationDone">
-      <p>Vielen Dank für Ihre Anmeldung.</p>
-      <p>Um Ihre Registrierung abzuschließen, klicken Sie bitte auf den Link in der E-Mail.</p>
+  <div class="container mt-5" id="box-container">
+    <div class="row text-center mb-4 mt-4">
+      <h1>Registrierung</h1>
     </div>
-    <div class="row mt-5" v-else>
-      <div class="col-sm-4 text-center">
-        <h1>Registrierung</h1>
+    <div
+      class="row d-flex justify-content-center"
+      v-if="registrationDone"
+    >
+      <div class="alert alert-success">
+        <p>Vielen Dank für Ihre Anmeldung. Um Ihre Registrierung abzuschließen, klicken Sie bitte auf den Link in
+          der E-Mail.
+        </p>
       </div>
-      <div class="col-sm-8 mt-3">
+    </div>
+    <div class="row" v-else>
+      <div class="row d-flex justify-content-center">
+        <div class="alert alert-danger" v-if="error">
+          <p>{{ error }}</p>
+        </div>
+        <div class="alert alert-danger" v-if="!formIsValid">
+          <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
+        </div>
         <form @submit.prevent="submitForm">
-          <div class="invalid" v-if="error">
-            <p>{{ error }}</p>
-          </div>
-          <div class="invalid" v-if="!formIsValid">
-            <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
-          </div>
           <div class="row mb-3" :class="{ invalid: !email.isValid }">
-            <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="email">E-Mail</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="email"
                 type="email"
+                placeholder="E-Mail"
                 v-model="email.value"
                 @blur="clearValidity('email')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !name.isValid }">
-            <label class="col-sm-3 col-form-label" for="name">Name</label>
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="name">Name</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="name"
                 type="text"
+                placeholder="Name"
                 v-model="name.value"
                 @blur="clearValidity('name')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
-            <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="zipCode">PLZ</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="zipCode"
                 type="text"
+                placeholder="PLZ"
                 v-model="zipCode.value"
                 @blur="clearValidity('zipCode')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !city.isValid }">
-            <label class="col-sm-3 col-form-label" for="city">Ort</label>
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="city">Ort</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="city"
                 type="text"
+                placeholder="Ort"
                 v-model="city.value"
                 @blur="clearValidity('city')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !phone.isValid }">
-            <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="phone">Telefon</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="phone"
                 type="text"
+                placeholder="Telefon"
                 v-model="phone.value"
                 @blur="clearValidity('phone')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !password.isValid }">
-            <label class="col-sm-3 col-form-label" for="password"
-              >Passwort</label
-            >
-            <div class="col-sm-6">
+            <label class="col-3 col-form-label" for="password">Passwort</label>
+            <div class="col-9">
               <input
                 class="form-control"
                 id="password"
                 type="password"
+                placeholder="Passwort"
                 v-model="password.value"
                 @blur="clearValidity('password')"
               />
             </div>
           </div>
           <div class="row mb-3" :class="{ invalid: !password.isValid }">
-            <label class="col-sm-3 col-form-label" for="repeatPassword"
+            <label class="col-3 col-form-label" for="repeatPassword"
               >Wiederholung</label
             >
-            <div class="col-sm-6">
+            <div class="col-9">
               <input
                 class="form-control"
                 id="repeatPassword"
                 type="password"
+                placeholder="Passwort wiederholen"
                 v-model="repeatPassword"
               />
             </div>
           </div>
           <div
-            class="form-check mt-4 col-sm-7"
+            class="form-check mt-4 col-12"
             :class="{ invalid: !confirm.isValid }"
           >
             <input
@@ -120,13 +131,16 @@
               <b>Datenschutzerklärung</b> gelesen.
             </label>
           </div>
-          <div class="row mt-4 justify-content-center">
-            <button class="btn btn-primary col-sm-4">Registrieren</button>
+          <div class="mt-4 justify-content-center">
+            <button class="btn btn-primary col-12">Registrieren</button>
           </div>
         </form>
-        <div class="row mt-4 justify-content-center">
-          <p>Bereits registriert?</p>
-          <p><router-link to="/login">Hier klicken</router-link> um sich einzuloggen. </p>
+        <div class="mt-4 d-flex justify-content-center">
+          <p>
+            Bereits registriert?
+            <router-link to="/login">Hier klicken</router-link> um sich
+            einzuloggen.
+          </p>
         </div>
       </div>
     </div>
@@ -147,7 +161,7 @@ export default {
       confirm: { value: false, isValid: true },
       formIsValid: true,
       error: null,
-      registrationDone: false
+      registrationDone: false,
     };
   },
   methods: {
@@ -221,5 +235,27 @@ export default {
 }
 .invalid input {
   border: 1px solid red;
+}
+#box-container {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  max-width: 540px;
+}
+form {
+  max-width: 440px;
+}
+.form-check {
+  font-size: 0.85rem;
+}
+.alert {
+  max-width: 380px;
+  padding: 5px 5px 5px 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.alert p {
+  margin: 0;
 }
 </style>

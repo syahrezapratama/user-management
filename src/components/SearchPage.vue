@@ -1,76 +1,87 @@
 <template>
-  <div class="container col-8">
-    <h1>Search</h1>
-    <form @submit.prevent="searchUsers">
-      <div class="invalid" v-if="!formIsValid">
-        <p>Bitte füllen Sie mindestens ein Feld aus.</p>
-      </div>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="email"
-            name="email"
-            type="text"
-            v-model="email"
-          />
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="mt-5" id="box-container">
+        <div class="row mx-3 my-4">
+          <h1 class="mb-4">Search</h1>
+          <form @submit.prevent="searchUsers">
+            <div class="invalid" v-if="!formIsValid">
+              <p>Bitte füllen Sie mindestens ein Feld aus.</p>
+            </div>
+            <div class="row mb-3">
+              <label class="col-3 col-form-label" for="email">E-Mail</label>
+              <div class="col-9">
+                <input
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  type="text"
+                  placeholder="E-Mail"
+                  v-model="email"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-3 col-form-label" for="name">Name</label>
+              <div class="col-9">
+                <input
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Name"
+                  v-model="name"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-3 col-form-label" for="zipCode">PLZ</label>
+              <div class="col-9">
+                <input
+                  class="form-control"
+                  id="zipCode"
+                  name="zipCode"
+                  type="text"
+                  placeholder="PLZ"
+                  v-model="zipCode"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-3 col-form-label" for="city">Ort</label>
+              <div class="col-9">
+                <input
+                  class="form-control"
+                  id="city"
+                  name="city"
+                  type="text"
+                  placeholder="Ort"
+                  v-model="city"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-3 col-form-label" for="phone">Telefon</label>
+              <div class="col-9">
+                <input
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  type="text"
+                  placeholder="Telefon"
+                  v-model="phone"
+                />
+              </div>
+            </div>
+            <div class="row mt-4 justify-content-center">
+              <button class="btn btn-primary col-5">Suchen</button>
+            </div>
+          </form>
         </div>
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="name">Name</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="name"
-            name="name"
-            type="text"
-            v-model="name"
-          />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="zipCode">PLZ</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="zipCode"
-            name="zipCode"
-            type="text"
-            v-model="zipCode"
-          />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="city">Ort</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="city"
-            name="city"
-            type="text"
-            v-model="city"
-          />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
-        <div class="col-sm-8">
-          <input
-            class="form-control"
-            id="phone"
-            name="phone"
-            type="text"
-            v-model="phone"
-          />
-        </div>
-      </div>
-      <div class="row mt-4 justify-content-center">
-        <button class="btn btn-primary col-sm-4">Suchen</button>
-      </div>
-    </form>
-    <div class="mt-5" v-if="searchResults.length > 0">
-      <h1>Results</h1>
+    </div>
+    <div class="my-5" v-if="searchResults.length > 0">
+      <h1 class="mb-4">Results</h1>
       <table class="table table-striped mb-4">
         <thead>
           <tr>
@@ -97,7 +108,7 @@
       </table>
     </div>
     <div class="mt-5" v-if="searchDone && searchResults.length === 0">
-      <p>Keine Ergebnisse gefunden</p>
+      <p>Keine Ergebnisse gefunden.</p>
     </div>
   </div>
 </template>
@@ -113,18 +124,24 @@ export default {
       phone: "",
       error: null,
       formIsValid: true,
-      searchDone: false
+      searchDone: false,
     };
   },
   computed: {
     searchResults() {
       return this.$store.getters.searchResults;
-    }
+    },
   },
   methods: {
     validateForm() {
       this.formIsValid = true;
-      if (this.email === "" && this.name === "" && this.zipCode === "" && this.city === "" && this.phone === "") {
+      if (
+        this.email === "" &&
+        this.name === "" &&
+        this.zipCode === "" &&
+        this.city === "" &&
+        this.phone === ""
+      ) {
         this.formIsValid = false;
       }
     },
@@ -148,7 +165,7 @@ export default {
     },
     handleRowClick(userId) {
       this.$router.push("/users/" + userId);
-    }
+    },
   },
 };
 </script>
@@ -159,5 +176,11 @@ export default {
 }
 tbody > tr:hover {
   cursor: pointer;
+}
+#box-container {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  max-width: 540px;
 }
 </style>

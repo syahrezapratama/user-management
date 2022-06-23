@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-8">
+  <div class="container mt-5" id="box-container">
     <p v-if="isLoading">Loading...</p>
     <div v-else>
       <div class="row">
@@ -44,7 +44,7 @@
       </div>
       <div class="row mt-5 justify-content-center" v-if="isAdmin">
         <router-link :to="userDataLink">
-          <button class="btn btn-primary col-sm-4">Bearbeiten</button>
+          <button class="btn btn-primary col-12">Bearbeiten</button>
         </router-link>
       </div>
     </div>
@@ -87,4 +87,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#box-container {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  max-width: 540px;
+  padding: 40px;
+}
+</style>

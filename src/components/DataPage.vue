@@ -1,22 +1,22 @@
 <template>
-  <div class="container col-10">
+  <div class="container mt-5" id="box-container">
     <p v-if="isLoading">Loading...</p>
-    <div class="container col-8" v-if="!isLoading && updateDone">
+    <div class="py-4 px-4" v-if="!isLoading && updateDone">
       <p>Die Daten wurden erfolgreich aktualisiert.</p>
       <p>
         Bitte <router-link to="" @click="() => {updateDone = false}">klicken Sie hier</router-link> um die
         aktualisierten Daten aufzurufen.
       </p>
     </div>
-    <div class="container col-8" v-else>
-      <h1>My Data</h1>
+    <div class="row mx-3 my-4" v-else>
+      <h1 class="mb-4">My Data</h1>
       <form @submit.prevent="submitForm">
         <div class="invalid" v-if="!formIsValid">
           <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
         </div>
         <div class="row mb-3" :class="{ invalid: !email.isValid }">
-          <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-          <div class="col-sm-8">
+          <label class="col-4 col-form-label" for="email">E-Mail</label>
+          <div class="col-8">
             <input
               class="form-control"
               id="email"
@@ -27,8 +27,8 @@
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !name.isValid }">
-          <label class="col-sm-3 col-form-label" for="name">Name</label>
-          <div class="col-sm-8">
+          <label class="col-4 col-form-label" for="name">Name</label>
+          <div class="col-8">
             <input
               class="form-control"
               id="name"
@@ -39,8 +39,8 @@
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !zipCode.isValid }">
-          <label class="col-sm-3 col-form-label" for="postalCode">PLZ</label>
-          <div class="col-sm-8">
+          <label class="col-4 col-form-label" for="postalCode">PLZ</label>
+          <div class="col-8">
             <input
               class="form-control"
               id="postalCode"
@@ -51,8 +51,8 @@
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !city.isValid }">
-          <label class="col-sm-3 col-form-label" for="city">Ort</label>
-          <div class="col-sm-8">
+          <label class="col-4 col-form-label" for="city">Ort</label>
+          <div class="col-8">
             <input
               class="form-control"
               id="city"
@@ -63,8 +63,8 @@
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !phone.isValid }">
-          <label class="col-sm-3 col-form-label" for="phone">Telefon</label>
-          <div class="col-sm-8">
+          <label class="col-4 col-form-label" for="phone">Telefon</label>
+          <div class="col-8">
             <input
               class="form-control"
               id="phone"
@@ -75,21 +75,22 @@
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !password.isValid }">
-          <label class="col-sm-3 col-form-label" for="password"
+          <label class="col-4 col-form-label" for="password"
             >Neues Passwort</label
           >
-          <div class="col-sm-8">
+          <div class="col-8">
             <input
               class="form-control"
               id="password"
               name="password"
               type="password"
+              placeholder="Neues Passwort eingeben"
               v-model="password.value"
             />
           </div>
         </div>
         <div class="row mb-3" :class="{ invalid: !password.isValid }">
-          <label class="col-sm-3 col-form-label" for="repeatPassword"
+          <label class="col-sm-4 col-form-label" for="repeatPassword"
             >Wiederholung</label
           >
           <div class="col-sm-8">
@@ -98,12 +99,13 @@
               id="repeatPassword"
               name="repeatPassword"
               type="password"
+              placeholder="Passwort wiederholen"
               v-model="repeatPassword"
             />
           </div>
         </div>
         <div class="row mt-5 justify-content-center">
-          <button class="btn btn-primary col-sm-4">Aktualisieren</button>
+          <button class="btn btn-primary col-6">Aktualisieren</button>
         </div>
       </form>
     </div>
@@ -220,5 +222,11 @@ export default {
 }
 .invalid input {
   border: 1px solid red;
+}
+#box-container {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  max-width: 720px;
 }
 </style>

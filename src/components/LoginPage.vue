@@ -1,52 +1,47 @@
 <template>
-  <div class="row mt-5">
-    <div class="col-sm-4 text-center">
+  <div class="container mt-5" id="box-container">
+    <div class="row text-center mb-4 mt-5">
       <h1>Login</h1>
     </div>
-    <div class="col-sm-8">
-      <div class="invalid" v-if="error">
+    <div class="row d-flex justify-content-center">
+      <div class="invalid alert alert-danger" v-if="error">
           <p>{{ error }}</p>
         </div>
-      <div class="invalid" v-if="!formIsValid">
+      <div class="invalid alert alert-danger" v-if="!formIsValid">
         <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
       </div>
       <form @submit.prevent="confirmLogin">
-        <div class="row mb-3" :class="{ invalid: !email.isValid }">
-          <label class="col-sm-3 col-form-label" for="email">E-Mail</label>
-          <div class="col-sm-6">
-            <input
+        <div class="mb-3" :class="{ invalid: !email.isValid }">
+          <label class="col-form-label" for="email">E-Mail</label>
+          <input
               class="form-control"
               id="email"
               type="email"
               placeholder="E-Mail"
               v-model="email.value"
             />
-          </div>
         </div>
-        <div class="row mb-3" :class="{ invalid: !password.isValid }">
-          <label class="col-sm-3 col-form-label" for="password">Passwort</label>
-          <div class="col-sm-6">
-            <input
+        <div class="mb-3" :class="{ invalid: !password.isValid }">
+          <label class="col-form-label" for="password">Passwort</label>
+          <input
               class="form-control"
               id="password"
               type="password"
               placeholder="Passwort"
               v-model="password.value"
             />
-          </div>
         </div>
-        <div class="row mt-4 justify-content-center">
-          <button class="btn btn-primary col-sm-4">Login</button>
+        <div class="mt-5">
+          <button class="btn btn-primary col-12">Login</button>
         </div>
       </form>
-      <div class="mt-5">
-        <p>Noch nicht angemeldet?</p>
-        <p>
+    </div>
+    <div class="mt-5 d-flex justify-content-center">
+        <p>Noch nicht angemeldet?
           <router-link to="/register">Hier klicken</router-link> um sich zu
           registrieren.
         </p>
       </div>
-    </div>
   </div>
 </template>
 
@@ -57,7 +52,7 @@ export default {
       email: { value: "", isValid: true },
       password: { value: "", isValid: true },
       formIsValid: true,
-      error: null,
+      error: null, 
     };
   },
   methods: {
@@ -68,7 +63,7 @@ export default {
         this.formIsValid = false;
       }
       if (this.password.value === "") {
-        this.email.value = false;
+        this.password.isValid = false;
         this.formIsValid = false;
       }
     },
@@ -92,11 +87,29 @@ export default {
 </script>
 
 <style scoped>
-.invalid p,
 .invalid label {
   color: red;
 }
 .invalid input {
   border: 1px solid red;
+}
+#box-container {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  max-width: 540px;
+}
+form {
+  max-width: 400px;
+}
+.alert {
+  max-width: 380px;
+  padding: 5px 5px 5px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.alert p {
+  margin: 0;
 }
 </style>

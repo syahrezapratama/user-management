@@ -1,12 +1,18 @@
 <template>
   <div class="container">
-    <h1 class="mb-4">Vielen Dank!</h1>
-    <p>Ihr Account wurde freigeschaltet.</p>
-    <p>
-      Bitte klicken Sie
-      <router-link to="/login"> hier </router-link>
-      um sich anzumelden.
-    </p>
+    <div class="row d-flex justify-content-center">
+      <div class="row mt-5 mb-4">
+        <h1 class="text-center">Vielen Dank!</h1>
+      </div>
+      <div class="row alert alert-success">
+        <p>Ihr Account wurde freigeschaltet.</p>
+        <p>
+          Bitte klicken Sie
+          <router-link to="/login"> hier </router-link>
+          um sich anzumelden.
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,4 +46,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.alert {
+  max-width: 380px;
+}
+</style>
