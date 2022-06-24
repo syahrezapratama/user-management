@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h1 class="mb-4">List Persons</h1>
+    <h1 class="mb-4">Users</h1>
     <p v-if="isLoading">Loading users...</p>
     <table class="table table-striped mb-4" v-else>
       <thead>

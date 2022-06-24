@@ -132,7 +132,7 @@ export default {
     };
   },
   created() {
-    this.userId = this.$route.params.userId;
+    this.userId = this.$store.getters.currentUser.id;
     this.loadUser(this.userId);
   },
   computed: {
@@ -206,6 +206,14 @@ export default {
       try {
         await this.$store.dispatch("updateUserData", updatedUserData);
         this.updateDone = true;
+        this.email.isValid = true;
+        this.name.isValid = true;
+        this.zipCode.isValid = true;
+        this.city.isValid = true;
+        this.phone.isValid = true;
+        this.password.isValid = true;
+        this.password.value = "";
+        this.repeatPassword = "";
       } catch (error) {
         this.error = error.message || "Failed to update data.";
         console.log(this.error);

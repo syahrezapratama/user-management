@@ -11,6 +11,7 @@ import RegistrationForm from "../components/RegistrationForm.vue";
 import LoginPage from "../components/LoginPage.vue";
 import BaseDialog from "../components/BaseDialog.vue";
 import EmailVerified from "../components/EmailVerified.vue";
+import NotFound from "../components/NotFound.vue";
 
 import store from "../store/index.js";
 
@@ -19,7 +20,7 @@ const router = createRouter({
   routes: [
     { path: "/", redirect: "/home" },
     { path: "/home", component: HomePage, meta: { requiresAuth: true } },
-    { path: "/user/:userId", component: DataPage, meta: { requiresAuth: true } },
+    { path: "/my-data", component: DataPage, meta: { requiresAuth: true } },
     { path: "/users", component: ListPersons, meta: { requiresAuth: true } },
     { path: "/search", component: SearchPage, meta: { requiresAuth: true } },
     { path: "/logout", component: LogoutPage, meta: { requiresUnauth: true } },
@@ -28,7 +29,8 @@ const router = createRouter({
     { path: "/register", component: RegistrationForm, meta: { requiresUnauth: true } },
     { path: "/login", component: LoginPage, meta: { requiresUnauth: true } },
     { path: "/dialog", component: BaseDialog },
-    { path: "/verify/:verificationToken", component: EmailVerified, meta: {requiresUnauth: true} }
+    { path: "/verify/:verificationToken", component: EmailVerified, meta: {requiresUnauth: true} },
+    { path: "/:notFound(.*)", component: NotFound }
   ],
   linkActiveClass: "active",
 });
