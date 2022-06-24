@@ -7,9 +7,7 @@
       <div class="row alert alert-success">
         <p>Ihr Account wurde freigeschaltet.</p>
         <p>
-          Bitte klicken Sie
-          <router-link to="/login"> hier </router-link>
-          um sich anzumelden.
+          Bitte <router-link to="/login">klicken Sie hier,</router-link> um sich anzumelden.
         </p>
       </div>
     </div>

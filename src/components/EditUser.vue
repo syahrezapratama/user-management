@@ -1,6 +1,9 @@
 <template>
   <div class="container mt-5" id="box-container">
-    <div class="invalid" v-if="!formIsValid">
+    <div class="alert alert-danger mt-3" v-if="error">
+      <p>{{ error }}</p>
+    </div>
+    <div class="alert alert-danger mt-3" v-if="!formIsValid">
       <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
     </div>
     <div class="row mx-3 my4">
@@ -123,11 +126,6 @@
         </div>
       </form>
     </div>
-
-    <!-- <base-dialog
-      title="Bestätigung"
-      text="Möchten Sie den Datensatz wirklich löschen?"
-    ></base-dialog> -->
   </div>
 </template>
 
@@ -176,7 +174,6 @@ export default {
         this.password.value !== "" &&
         this.password.value !== this.repeatPassword
       ) {
-        console.log("password invalid");
         this.password.isValid = false;
         this.formIsValid = false;
       }
@@ -211,13 +208,11 @@ export default {
       if (response) {
         try {
           await this.$store.dispatch("deleteUser", userId);
-          this.$router.replace("/persons");
+          this.$router.replace("/users");
         } catch (error) {
           console.log(error);
         }
       }
-      // await this.$store.dispatch("deleteUser", userId);
-      //   this.$router.replace("/persons");
     },
   },
   computed: {
@@ -250,5 +245,8 @@ export default {
   border-radius: 5px;
   background-color: #f8f9fa;
   max-width: 720px;
+}
+.alert p {
+  margin: 0;
 }
 </style>

@@ -10,10 +10,13 @@
     </div>
     <div class="row mx-3 my-4" v-else>
       <h1 class="mb-4">My Data</h1>
+      <div class="alert alert-danger" v-if="error">
+        <p>{{ error }}</p>
+      </div>
+      <div class="alert alert-danger" v-if="!formIsValid">
+        <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
+      </div>
       <form @submit.prevent="submitForm">
-        <div class="invalid" v-if="!formIsValid">
-          <p>Bitte prüfen und korrigieren Sie die markierten Felder.</p>
-        </div>
         <div class="row mb-3" :class="{ invalid: !email.isValid }">
           <label class="col-4 col-form-label" for="email">E-Mail</label>
           <div class="col-8">
@@ -202,7 +205,6 @@ export default {
         password: this.password.value,
         type: this.userType,
       };
-      console.log(updatedUserData);
       try {
         await this.$store.dispatch("updateUserData", updatedUserData);
         this.updateDone = true;
@@ -214,6 +216,7 @@ export default {
         this.password.isValid = true;
         this.password.value = "";
         this.repeatPassword = "";
+        this.error = null;
       } catch (error) {
         this.error = error.message || "Failed to update data.";
         console.log(this.error);
@@ -236,5 +239,8 @@ export default {
   border-radius: 5px;
   background-color: #f8f9fa;
   max-width: 720px;
+}
+.alert p {
+  margin: 0;
 }
 </style>

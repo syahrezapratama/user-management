@@ -7,7 +7,7 @@
       <div class="row alert alert-secondary">
         <p>Sie haben sich erfolgreich ausgeloggt.</p>
         <p>
-          Bitte klicken Sie<router-link to="/login"> hier </router-link> um sich
+          Bitte <router-link to="/login">klicken Sie hier,</router-link> um sich
           wieder einzuloggen.
         </p>
       </div>

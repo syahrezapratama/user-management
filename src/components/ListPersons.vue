@@ -103,7 +103,6 @@ export default {
       console.log(error);
     }
     this.isLoading = false;
-    console.log(this.pages);
   },
 };
 </script>

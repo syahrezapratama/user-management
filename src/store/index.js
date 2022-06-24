@@ -94,7 +94,6 @@ const store = createStore({
       console.log(response);
       const data = await response.json();
       const result = data.results;
-      console.log(result);
       if (!response.ok) {
         const error = new Error(
           response.statusText || "Failed to load users from API."
@@ -132,7 +131,6 @@ const store = createStore({
       );
       console.log(response);
       const data = await response.json();
-      console.log(data);
       if(!response.ok) {
         const error = new Error(response.statusText || "Failed to search.");
         throw error;
@@ -148,7 +146,6 @@ const store = createStore({
       });
       console.log(response);
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         const error = new Error(
           response.statusText || `Failed to load user with id: ${userId}.`
@@ -195,6 +192,9 @@ const store = createStore({
         password: payload.password,
         type: payload.type ? payload.type : "normal",
       };
+      if (updateUser.password === "") {
+        delete updateUser.password;
+      }
       const bearerToken = "Bearer " + localStorage.getItem("token");
       const requestOptions = {
         method: "PUT",
@@ -207,12 +207,9 @@ const store = createStore({
       );
       console.log(response);
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
-        const error = new Error(
-          response.statusText || `Failed to update user ${userId}.`
-        );
-        throw error;
+        const message = data.message;
+        throw new Error(message || "Cannot register");
       }
       context.commit("updateUser", updateUser);
     },
@@ -264,7 +261,6 @@ const store = createStore({
         body: JSON.stringify(payload)
       });
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         const message = data.message;
         throw new Error(message);
