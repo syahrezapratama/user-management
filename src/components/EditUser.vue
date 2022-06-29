@@ -1,5 +1,6 @@
 <template>
   <div class="container mt-5" id="box-container">
+    <base-dialog :show="openDialog" @close="() => openDialog = false" @confirm="deleteUser()"></base-dialog>
     <div class="alert alert-danger mt-3" v-if="error">
       <p>{{ error }}</p>
     </div>
@@ -116,7 +117,7 @@
           <button
             type="button"
             class="btn btn-danger col-5"
-            @click="deleteUser"
+            @click="confirmDelete"
           >
             Löschen
           </button>
@@ -130,7 +131,11 @@
 </template>
 
 <script>
+import BaseDialog from "./BaseDialog.vue";
 export default {
+  components: {
+    BaseDialog
+  },
   data() {
     return {
       id: "",
@@ -145,6 +150,7 @@ export default {
       formIsValid: true,
       error: null,
       isLoading: false,
+      openDialog: false
     };
   },
   methods: {
@@ -202,17 +208,18 @@ export default {
         console.log(this.error);
       }
     },
+    confirmDelete() {
+      this.openDialog = true;
+    },
     async deleteUser() {
       const userId = this.id;
-      const response = confirm("Möchten Sie den Datensatz wirklich löschen?");
-      if (response) {
-        try {
+      try {
           await this.$store.dispatch("deleteUser", userId);
+          this.openDialog = false;
           this.$router.replace("/users");
         } catch (error) {
           console.log(error);
         }
-      }
     },
   },
   computed: {

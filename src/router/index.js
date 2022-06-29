@@ -30,6 +30,7 @@ const router = createRouter({
     { path: "/login", component: LoginPage, meta: { requiresUnauth: true } },
     { path: "/dialog", component: BaseDialog },
     { path: "/verify/:verificationToken", component: EmailVerified, meta: {requiresUnauth: true} },
+    { path: "/dialog", component: BaseDialog },
     { path: "/:notFound(.*)", component: NotFound }
   ],
   linkActiveClass: "active",
