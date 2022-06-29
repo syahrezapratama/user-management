@@ -26,7 +26,7 @@ export default {
       const verificationToken = route.params.verificationToken;
       try {
         const response = await fetch(
-          `http://localhost:8081/api/verify/${verificationToken}`
+          `http://localhost:8081/api/auth/verify/${verificationToken}`
         );
         console.log(response);
         if (!response.ok) {

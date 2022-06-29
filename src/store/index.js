@@ -139,7 +139,7 @@ const store = createStore({
     },
     async selectUser(context, payload) {
       const userId = payload;
-      const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -169,7 +169,7 @@ const store = createStore({
         body: JSON.stringify(userData),
       };
       const response = await fetch(
-        "http://localhost:8081/api/register",
+        "http://localhost:8081/api/users/register",
         requestOptions
       );
       console.log(response);
@@ -202,7 +202,7 @@ const store = createStore({
         body: JSON.stringify(updateUser),
       };
       const response = await fetch(
-        `http://localhost:8081/api/user/${userId}`,
+        `http://localhost:8081/api/users/${userId}`,
         requestOptions
       );
       console.log(response);
@@ -216,7 +216,7 @@ const store = createStore({
     async deleteUser(context, payload) {
       const userId = payload;
       const bearerToken = "Bearer " + localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8081/api/user/${userId}`, {
+      const response = await fetch(`http://localhost:8081/api/users/${userId}`, {
         method: "DELETE",
         headers: { "Authorization": bearerToken }
       });
@@ -253,7 +253,7 @@ const store = createStore({
       context.commit("setAutoLogout")
     },
     async loginUser(context, payload) {
-      const response = await fetch("http://localhost:8081/api/login", {
+      const response = await fetch("http://localhost:8081/api/auth/login", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
