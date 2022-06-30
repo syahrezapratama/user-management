@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import HomePage from "../components/HomePage.vue";
-import DataPage from "../components/DataPage.vue";
-import ListPersons from "../components/ListPersons.vue";
-import SearchPage from "../components/SearchPage.vue";
-import LogoutPage from "../components/LogoutPage.vue";
-import UserData from "../components/UserData.vue";
-import EditUser from "../components/EditUser.vue";
-import RegistrationForm from "../components/RegistrationForm.vue";
-import LoginPage from "../components/LoginPage.vue";
+import HomePage from "../views/HomePage.vue";
+import DataPage from "../views/DataPage.vue";
+import ListPersons from "../views/ListPersons.vue";
+import SearchPage from "../views/SearchPage.vue";
+import LogoutPage from "../views/LogoutPage.vue";
+import UserData from "../views/UserData.vue";
+import EditUser from "../views/EditUser.vue";
+import RegistrationForm from "../views/RegistrationForm.vue";
+import LoginPage from "../views/LoginPage.vue";
 import BaseDialog from "../components/BaseDialog.vue";
-import EmailVerified from "../components/EmailVerified.vue";
-import NotFound from "../components/NotFound.vue";
+import EmailVerified from "../views/EmailVerified.vue";
+import NotFound from "../views/NotFound.vue";
 
 import store from "../store/index.js";
 

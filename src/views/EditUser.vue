@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import BaseDialog from "./BaseDialog.vue";
+import BaseDialog from "../components/BaseDialog.vue";
 export default {
   components: {
     BaseDialog
