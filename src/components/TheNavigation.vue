@@ -3,7 +3,7 @@
     <div class="container-fluid justify-content-end">
       <ul class="nav nav-pills">
         <li class="nav-item">
-          <router-link class="nav-link" style="text-decoration: none;" to="/my-data">My Data</router-link>
+          <router-link class="nav-link" to="/mydata">My Data</router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/users">Users</router-link>
